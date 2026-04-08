@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ecommerce Backend — Presentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-navy: #4a00e0;   /* primary purple */
+            --brand-orange: #8e2de2; /* accent (gradient end) */
+            --brand-dark: #3700b3;   /* darker purple for nav */
+            --page-bg: #f8fbff;      /* light cool background */
+            --card-white: #ffffff;
+            --text: #0f172a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--page-bg); color: var(--text); font-family: 'Segoe UI', Arial, sans-serif; overflow: hidden; }
+
+        .slide { position: absolute; inset: 0; display:flex; flex-direction:column; justify-content:center; align-items:center; padding: 60px 10%; opacity:0; visibility:hidden; transition: all 0.45s ease-in-out; }
+        .slide.active { opacity:1; visibility:visible; }
+
+        .top-nav { position: fixed; top:0; width:100%; height:60px; background: linear-gradient(135deg, var(--brand-navy) 0%, var(--brand-orange) 100%); display:flex; align-items:center; padding:0 40px; z-index:100; }
+        .project-title { color: white; font-weight: 700; font-size: 1.4rem; }
+        .project-title span { color: var(--brand-orange); }
+        .top-right { margin-left: auto; color: white; font-size: 0.95rem; }
+
+        .card { background: var(--card-white); padding: 46px; border-radius:8px; box-shadow: 0 6px 22px rgba(0,0,0,0.08); width:100%; max-width:1100px; border-top: 5px solid var(--brand-orange); }
+        h1 { font-size: 3rem; color: var(--brand-navy); margin-bottom: 8px; }
+        h2 { font-size: 2rem; color: var(--brand-navy); margin-bottom: 18px; display:flex; align-items:center; gap:14px; }
+
+        .icon-circle { background: var(--brand-orange); width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--brand-dark); }
+        ul { list-style:none; }
+        li { font-size:1.2rem; margin-bottom:14px; padding-left:34px; position:relative; line-height:1.4; }
+        li::before { content: "➜"; position:absolute; left:0; color:var(--brand-orange); }
+
+        .controls { position: fixed; bottom:30px; right:40px; display:flex; gap:12px; z-index:200; }
+        button { padding:10px 22px; border:none; background:var(--brand-navy); color:#fff; border-radius:8px; cursor:pointer; font-weight:700; }
+        .project-btn { padding:12px 20px; background:var(--brand-navy); color:#fff; border-radius:8px; border:none; cursor:pointer; font-weight:700; }
+        .project-btn:hover { background:#1b2430; }
+
+        .footer { position: fixed; bottom: 20px; left: 40px; color:#333; font-size:0.95rem; }
+        pre.code { background:#232f3e; color: #febd69; padding: 18px; border-radius:6px; font-family: 'Courier New', monospace; font-size:0.95rem; }
+
+        @media (max-width:900px) {
+            h1 { font-size: 2.1rem; }
+            .card { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-nav">
+        <div class="project-title">JC<span>Market</span></div>
+        <div class="top-right">Full‑Stack E‑Commerce</div>
+    </div>
+
+    <div class="footer" id="slide-info">Slide 1 of 9</div>
+
+    <div class="controls">
+        <button onclick="move(-1)">PREVIOUS</button>
+        <button onclick="move(1)">NEXT</button>
+    </div>
+
+    <!-- Slide 1: Welcome -->
+    <div class="slide active">
+        <div class="card" style="text-align:center;">
+            <p style="color:var(--brand-orange); font-weight:700; letter-spacing:3px;">JCMarket</p>
+            <h1>JCMarket — Online Marketplace</h1>
+            <p style="font-size:1.15rem; color:#555; margin-top:6px;">A full-stack e-commerce platform with chat-powered product search</p>
+            <div style="margin-top:30px; display:inline-block; text-align:left; padding:18px; border:1px solid #eee; border-radius:6px;">
+                <strong>Repository:</strong> ecommerce-backend<br>
+                <strong>Main runtime:</strong> Node.js (recommend v22+)<br>
+                <strong>Run locally:</strong> npm install → npm run dev
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Objective -->
+    <div class="slide">
+        <div class="card">
+            <h2><div class="icon-circle">01</div>Project Objective</h2>
+            <ul>
+                <li>Provide REST APIs for products, cart, orders and users.</li>
+                <li>Support authentication (email / Google) and role-based access control.</li>
+                <li>Handle order persistence and shipping calculations.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 3: Tech Stack -->
+    <div class="slide">
+        <div class="card">
+            <h2><div class="icon-circle">02</div>Tech Stack</h2>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:18px;">
+                <div style="text-align:center; border:1px solid #eee; padding:16px;">Node.js & Express</div>
+                <div style="text-align:center; border:1px solid #eee; padding:16px;">Sequelize (ORM)</div>
+                <div style="text-align:center; border:1px solid #eee; padding:16px;">MySQL / Postgres support</div>
+                <div style="text-align:center; border:1px solid #eee; padding:16px;">JWT Authentication</div>
+                <div style="text-align:center; border:1px solid #eee; padding:16px;">Nodemailer (emails)</div>
+                <div style="text-align:center; border:1px solid #eee; padding:16px;">sql.js (optional sqlite mode)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Chatbot Implementation -->
+    <div class="slide">
+        <div class="card">
+            <h2><div class="icon-circle">03</div>How I Built The Chatbot</h2>
+            <ul>
+                <li><strong>Frontend:</strong> A React `ChatWidget` component (client/src/components/ChatWidget.js) toggles the UI, sends user messages to the backend, and stores a `threadId` to continue conversations.</li>
+                <li><strong>Backend:</strong> Node/Express server (server/index.ts) exposes `POST /chat` and `POST /chat/:threadId` endpoints that call a LangChain agent.</li>
+                <li><strong>Agent:</strong> Implemented in `agent.ts` using LangChain + Google Generative AI (Gemini). The agent uses a StateGraph workflow, a custom `item_lookup` tool, and `MongoDBSaver` to persist threads.</li>
+                <li><strong>Search:</strong> Semantic vector search via `GoogleGenerativeAIEmbeddings` + `MongoDBAtlasVectorSearch` with a text-search fallback if no vectors match.</li>
+                <li><strong>Resilience:</strong> Uses retry/backoff for rate limits, validation with `zod`, and graceful error responses to the frontend.</li>
+                <li><strong>Env & Run:</strong> Requires `GOOGLE_API_KEY` and `MONGODB_ATLAS_URI`; start backend with `npm run dev` and open the client in a static server.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 4: Architecture -->
+    <div class="slide">
+        <div class="card">
+            <h2><div class="icon-circle">03</div>Project Structure</h2>
+            <ul>
+                <li>`routes/` — API endpoints (products, orders, auth, users)</li>
+                <li>`models/` — Sequelize models (Product, Order, User, CartItem)</li>
+                <li>`middleware/` — Auth, Google integration, helpers</li>
+                <li>`utils/` — Email, JWT helpers, session token logic</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 5: Setup -->
+    <div class="slide">
+        <div class="card">
+            <h2><div class="icon-circle">04</div>Setup & Run</h2>
+            <ol style="margin-left:20px; font-size:1.1rem;">
+                <li>Install Node.js (v22+ recommended).</li>
+                <li>Open the backend folder and run `npm install`.</li>
+                <li>Start in dev mode: `npm run dev` (uses `nodemon` + `tsx`).</li>
+            </ol>
+            <div style="margin-top:16px;">
+                <pre class="code">cd ecommerce-backend
+npm install
+npm run dev</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Scripts -->
+    <div class="slide">
+        <div class="card">
+            <h2><div class="icon-circle">05</div>Helpful Scripts</h2>
+            <ul>
+                <li><strong>dev:</strong> `nodemon --exec tsx server.ts` — development server</li>
+                <li><strong>start:</strong> `node dist/server.js` — production (build first)</li>
+                <li><strong>build:</strong> `tsc` — compile TypeScript to `dist/`</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 7: Challenges -->
+    <div class="slide">
+        <div class="card">
+            <h2 style="color:#c45500;"><div class="icon-circle" style="background:#c45500;color:white;">!</div>Technical Challenges</h2>
+            <ul>
+                <li><strong>Shipping Logic:</strong> Calculating variable delivery times & costs.</li>
+                <li><strong>Search:</strong> Fast, accurate product filtering and matching.</li>
+                <li><strong>Data Persistence:</strong> Keeping carts and orders consistent across reloads.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 8: Notes & Extensions -->
+    <div class="slide">
+        <div class="card">
+            <h2><div class="icon-circle">06</div>Extensions & Next Steps</h2>
+            <ul>
+                <li>Add unit/integration tests and CI pipeline.</li>
+                <li>Persist sessions in Redis for scale.</li>
+                <li>Add payment provider integration for real checkout.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 9: Open Projects -->
+    <div class="slide">
+        <div class="card" style="text-align:center;">
+            <h2><div class="icon-circle">07</div>Open Projects</h2>
+            <p style="margin-bottom:12px; font-weight:bold;">Click a button to open the project (opens in a new tab when possible).</p>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:12px;">
+                <button class="project-btn" onclick="openProject('index.html')">Open Root Website</button>
+                <button class="project-btn" onclick="openProject('JCMarket-ts/index.html')">Open JCMarket</button>
+                <button class="project-btn" onclick="openProject('ecommerce-chat-helper1/client/public/index.html')">Open Chat Client</button>
+                <button class="project-btn" onclick="openProject('ecommerce-backend/README.md')">Open Backend README</button>
+            </div>
+            <p style="margin-top:14px; color:#777; font-size:0.95rem;">Tip: For some links run a local server (see Setup slide).</p>
+        </div>
+    </div>
+
+    <!-- Slide 10: Thank You -->
+    <div class="slide">
+        <div class="card" style="text-align:center;">
+            <div class="icon-circle" style="width:100px;height:100px;font-size:2.5rem;margin:0 auto 20px;">✓</div>
+            <h1>Thank You</h1>
+            <p style="font-size:1.1rem;color:#555; margin-top:8px;">Questions? Open the repo and run the backend locally.</p>
+            <div style="margin-top:18px; font-weight:700; color:var(--brand-orange);">ecommerce-backend</div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const slideInfo = document.getElementById('slide-info');
+
+        // initialize slide info
+        slideInfo.innerText = `Slide ${currentSlide + 1} of ${slides.length}`;
+
+        function showSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = Math.max(0, Math.min(slides.length - 1, index));
+            slides[currentSlide].classList.add('active');
+            slideInfo.innerText = `Slide ${currentSlide + 1} of ${slides.length}`;
+        }
+
+        function move(step) { showSlide(currentSlide + step); }
+
+        function openProject(path) {
+            const win = window.open(path, '_blank');
+            if (!win) window.location.href = path;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') move(1);
+            if (e.key === 'ArrowLeft') move(-1);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+
+> ecommerce-backend@1.0.0 dev
+> nodemon --exec tsx server.ts
+
+[33m[nodemon] 3.1.9[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: ts,json[39m
+[32m[nodemon] starting `tsx server.ts`[39m
+◇ injected env (13) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+Loaded db from database.sqlite
+Server is running on port 3000
+Email delivery is configured for auth notifications.
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting child process[39m
+[32m[nodemon] starting `tsx server.ts`[39m
+◇ injected env (13) from .env // tip: ⌁ auth for agents [www.vestauth.com]

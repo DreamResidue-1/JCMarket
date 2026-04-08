@@ -1,0 +1,257 @@
+.add-product-page {
+  padding: 92px 24px 32px;
+  min-height: calc(100vh - 60px);
+  background:
+    radial-gradient(circle at top left, rgba(129, 190, 255, 0.25), transparent 28%),
+    linear-gradient(180deg, #eef4fb 0%, #f8fbfe 100%);
+}
+
+.admin-dashboard {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  gap: 24px;
+}
+
+.dashboard-panel {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.panel-header h1,
+.panel-header h2 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.panel-eyebrow {
+  margin: 0 0 8px;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.panel-copy {
+  margin: 10px 0 0;
+  color: #475569;
+  max-width: 620px;
+  line-height: 1.6;
+}
+
+.permission-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.permission-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: #e6f0ff;
+  color: #1d4ed8;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.add-product-form {
+  display: grid;
+  gap: 16px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label,
+.user-role-field span {
+  margin-bottom: 8px;
+  color: #334155;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.user-role-field select {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #0f172a;
+  background: #fff;
+}
+
+.login-button,
+.secondary-button,
+.danger-button {
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  padding: 13px 16px;
+  font-size: 15px;
+  font-weight: 700;
+  transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+}
+
+.login-button {
+  background-color: #3700b3;
+  color: white;
+}
+
+.secondary-button {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.danger-button {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.login-button:hover,
+.secondary-button:hover,
+.danger-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.login-button:disabled,
+.secondary-button:disabled,
+.danger-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+.login-success,
+.login-error {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+}
+
+.login-success {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.login-error {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.user-card {
+  border: 1px solid #dbe7f3;
+  border-radius: 18px;
+  padding: 18px;
+  background: #fbfdff;
+  display: grid;
+  gap: 16px;
+}
+
+.user-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.user-identity {
+  display: flex;
+  gap: 12px;
+}
+
+.user-identity p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-avatar.placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+.role-badge {
+  align-self: flex-start;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.user-role-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.permissions-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.user-actions {
+  display: flex;
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .add-product-page {
+    padding: 84px 16px 24px;
+  }
+
+  .dashboard-panel {
+    padding: 20px;
+  }
+
+  .form-row,
+  .user-actions {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,121 @@
+import axios from 'axios';
+import { ApiRequestError, getErrorMessage } from './errors';
+import type { AuthResponse, AuthSession, MeResponse } from '../types/auth';
+
+const configuredBaseUrl = (import.meta.env.VITE_API_BASE_URL || '').trim();
+const useDevProxy = import.meta.env.DEV
+  && /^https?:\/\/(?:localhost|127\.0\.0\.1):3000\/?$/i.test(configuredBaseUrl);
+
+const api = axios.create({
+  baseURL: useDevProxy ? '' : configuredBaseUrl,
+  withCredentials: true,
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest',
+  },
+});
+
+const sessionHintKey = 'jcmarket-has-session';
+
+const setSessionHint = (value: boolean) => {
+  try {
+    if (value) {
+      localStorage.setItem(sessionHintKey, 'true');
+    } else {
+      localStorage.removeItem(sessionHintKey);
+    }
+  } catch {
+    // Ignore storage failures.
+  }
+};
+
+let accessToken: string | null = null;
+export const setAccessToken = (token: string | null) => {
+  accessToken = token;
+  if (!token) {
+    setSessionHint(false);
+  }
+};
+
+let isRefreshing = false;
+let failedQueue: Array<{
+  resolve: (value: any) => void;
+  reject: (error: any) => void;
+}> = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach(({ resolve, reject }) => {
+    if (error) {
+      reject(error);
+    } else {
+      resolve(token);
+    }
+  });
+
+  failedQueue = [];
+};
+
+api.interceptors.request.use((config) => {
+  if (accessToken) {
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+
+  return config;
+});
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = (error.config as any);
+    const isRefreshRequest = typeof originalRequest?.url === 'string'
+      && originalRequest.url.includes('/api/auth/refresh');
+
+    if (
+      axios.isAxiosError(error)
+      && error.response?.status === 401
+      && !originalRequest?._retry
+      && !isRefreshRequest
+    ) {
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        }).then(() => api(originalRequest)).catch((err) => Promise.reject(err));
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      try {
+        const refreshResponse = await api.post<AuthResponse>('/api/auth/refresh');
+        const meResponse = await api.get<MeResponse>('/api/auth/me');
+
+        const newSession: AuthSession = {
+          accessToken: refreshResponse.data.accessToken,
+          user: meResponse.data,
+        };
+
+        setAccessToken(newSession.accessToken);
+        setSessionHint(true);
+        processQueue(null, newSession.accessToken);
+
+        originalRequest.headers = originalRequest.headers ?? {};
+        originalRequest.headers.Authorization = `Bearer ${newSession.accessToken}`;
+        return api(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError, null);
+        setAccessToken(null);
+        setSessionHint(false);
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
+    return Promise.reject(new ApiRequestError(
+      getErrorMessage(error, 'Request failed.'),
+      axios.isAxiosError(error) ? error.response?.status : undefined
+    ));
+  }
+);
+
+export default api;

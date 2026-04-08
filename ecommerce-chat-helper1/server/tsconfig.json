@@ -1,0 +1,24 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+
+    // Recommended Options
+    "strict": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2022",         // Change from ES5 to ES2022
+    "module": "NodeNext",       // Ensures compatibility with modern Node
+    "moduleResolution": "NodeNext",
+    "forceConsistentCasingInFileNames": true,
+   
+  }, 
+  "ts-node": {
+    "transpileOnly": true
+  },
+}

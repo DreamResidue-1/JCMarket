@@ -1,0 +1,362 @@
+.header {
+  /* background-color: rgb(8, 79, 45); */
+  background: linear-gradient(135deg, #4a00e0 0%, #8e2de2 100%);
+  color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+}
+
+.header .left-section {
+  width: 200px;
+}
+
+@media (max-width: 800px) {
+  .header .left-section , .image-active {
+    width: unset;
+  }
+}
+.header .header-link {
+  display: inline-block;
+  padding: 6px 9.5px;
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  border: 1px solid rgba(0, 0, 0, 0);
+}
+
+.header .header-link:hover {
+  border: 1px solid white;
+}
+
+.header .logo {
+  height: 26px;
+  margin-top: 1px;
+}
+
+.header .mobile-logo , .mobile-logo-text {
+  display: none;
+}
+
+@media (max-width: 675px) {
+  .header .logo , .logo-text {
+    display: none;
+  }
+
+  
+  .header .mobile-logo , .mobile-logo-text {
+    display: block;
+    height: 26px;
+    margin-top: 1px;
+  }
+}
+
+.header .middle-section {
+  flex: 1;
+  max-width: 850px;
+  margin-left: 10px;
+  margin-right: 10px;
+  display: flex;
+}
+
+.header .search-bar {
+  flex: 1;
+  width: 0;
+  font-size: 16px;
+  height: 40px;
+  padding-left: 15px;
+  border: none;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.header .search-button {
+  /* background-color: rgb(186, 255, 190); */
+  background-color: #4a00e0;
+  border: none;
+  width: 45px;
+  height: 40px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  flex-shrink: 0;
+}
+.search-button:hover{
+  background-color: #3700b3;
+}
+.header .search-icon {
+  height: 20px;
+  margin-left: 0px;
+
+  margin-top: 3px;
+}
+
+.header .right-section {
+  width: auto;
+  min-width: 280px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 4px;
+}
+
+.header .orders-link {
+  color: white;
+  
+  display: flex;
+  align-items: center;
+  padding-left: 13px;
+  padding-right: 13px;
+}
+
+.header .orders-text {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.header .login-link,
+.header .admin-link,
+.header .logout-link {
+  color: white;
+  display: flex;
+  align-items: center;
+  padding-left: 13px;
+  padding-right: 13px;
+  background: none;
+  border: none;
+}
+
+.header .login-text,
+.header .admin-text,
+.header .logout-text {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.header .user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+}
+
+.header .user-avatar-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.header .user-avatar-button:disabled {
+  cursor: wait;
+}
+
+.header .user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.header .user-avatar-input {
+  display: none;
+}
+
+.header .user-avatar-edit {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: hsl(215, 100%, 72%);
+  color: hsl(215, 60%, 20%);
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.22);
+}
+
+.header .user-avatar-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.header .user-name {
+  font-size: 14px;
+  font-weight: 500;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header .cart-link {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.header .cart-icon {
+  width: 120px;
+  margin: -25px  -30px ;
+}
+
+.header .cart-text {
+  margin-left: 5px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.header .cart-quantity {
+  /* color: rgb(8, 79, 45); */
+  color: #4a00e0;
+  font-size: 14px;
+  font-weight: 700;
+  
+  position: absolute;
+  top: 8.5px;
+  left: 45%;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+ 
+  
+
+  text-align: center;
+}
+.orders-link.active{
+  text-decoration:underline;
+}
+
+.image-active{
+  width: auto;
+  max-width: 400px;
+  display: flex;
+}
+
+
+
+.image-not-active{
+  width: auto;
+  display: flex;
+}
+
+.company-notice {
+  position: fixed;
+  top: 72px;
+  right: 18px;
+  z-index: 1200;
+  max-width: min(420px, calc(100vw - 36px));
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(12, 27, 54, 0.95);
+  color: white;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.22);
+}
+
+.company-notice button {
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+@media (max-width: 1100px) {
+  .header .user-name {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .header .right-section , .image-not-active{
+    min-width: auto;
+    flex-shrink: 0;
+    gap: 0;
+  }
+
+  .header .orders-link,
+  .header .admin-link,
+  .header .login-link,
+  .header .logout-link {
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+}
+
+@media (max-width: 720px) {
+  .header {
+    gap: 8px;
+  }
+
+  .header .middle-section {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .header .orders-text,
+  .header .admin-text,
+  .header .login-text,
+  .header .logout-text {
+    font-size: 13px;
+  }
+  .image-active , .image-not-active{
+    width: unset;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .header .admin-link {
+    display: none;
+  }
+
+  .company-notice {
+    left: 12px;
+    right: 12px;
+    max-width: none;
+  }
+
+}
+
+.left-section{
+  color:white;
+}
+
+.logo-text,.mobile-logo-text {
+  color: white;
+  font-size: 20px;
+  font-weight: 700; 
+}
