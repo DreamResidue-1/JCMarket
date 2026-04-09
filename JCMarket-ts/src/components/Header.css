@@ -273,10 +273,11 @@
 .company-notice {
   position: fixed;
   top: 72px;
-  right: 18px;
+  left: 18px;
   z-index: 1200;
   max-width: min(420px, calc(100vw - 36px));
   display: flex;
+  flex-direction: row-reverse;
   align-items: flex-start;
   gap: 12px;
   padding: 14px 16px;

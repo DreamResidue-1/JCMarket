@@ -161,9 +161,26 @@ export function Header({ cart }: HeaderProps) {
                 <span className="logout-text">Logout</span>
               </button>
             </div>
+
+            
            ) : (
           <></>
           )}
+       
+      {companyNotice && (
+        <div className="company-notice">
+          <span>{companyNotice}</span>
+          <button
+            type="button"
+            onClick={() => {
+              setCompanyNotice(null);
+            }}
+          >
+            x
+          </button>
+        </div>
+      )}
+
           <Link to="/" className="header-link">
            { //<img className="logo"
              // src="/images/logo-white.png" />
@@ -211,19 +228,7 @@ export function Header({ cart }: HeaderProps) {
         </div>
       </div>
 
-      {companyNotice && (
-        <div className="company-notice">
-          <span>{companyNotice}</span>
-          <button
-            type="button"
-            onClick={() => {
-              setCompanyNotice(null);
-            }}
-          >
-            x
-          </button>
-        </div>
-      )}
+      
     </>
   );
 }
