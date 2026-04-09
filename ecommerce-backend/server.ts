@@ -71,6 +71,14 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 
+// Allow popups (e.g. Google sign-in) to communicate with the opener window.
+// This relaxes COOP to `same-origin-allow-popups` so `window.postMessage` from
+// the popup is not blocked. Apply only for frontend/static responses.
+app.use((req: any, res: any, next: any) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  next();
+});
+
 // Serve images from the images folder
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
