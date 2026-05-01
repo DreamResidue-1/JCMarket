@@ -5,8 +5,11 @@ import './index.css'
 import App from './App.tsx'
 import { AuthProvider } from './hooks/useAuth'
 
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
+  || '489109189204-ve0eov52ofm0apd69d9npo5vlbjld1ru.apps.googleusercontent.com';
+
 createRoot(document.getElementById('root')!).render(
-  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+  <GoogleOAuthProvider clientId={googleClientId}>
     <HashRouter>
       <AuthProvider>
         <App />
