@@ -16,7 +16,7 @@ services:
         destination: https://jcmarket.onrender.com/api/*
       - type: rewrite
         source: /images/*
-        destination: https://jcmarket.onrender.com/*
+        destination: https://jcmarket.onrender.com/images*
       - type: rewrite
         source: /*
         destination: /index.html
