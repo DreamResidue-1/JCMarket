@@ -11,11 +11,11 @@ export default defineConfig({
   server:{ 
     proxy:{
       '/api':{
-        target: 'https://jcmarket.onrender.com'
+        target: 'https://api.render.com/deploy/srv-d77857gule4c73f5kgbg?key=rvkpiSHWJDM'
       }, 
       
       '/images':{
-        target: 'https://jcmarket.onrender.com'
+        target: 'https://api.render.com/deploy/srv-d77857gule4c73f5kgbg?key=rvkpiSHWJDM'
       }
     }
   }
