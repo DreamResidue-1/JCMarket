@@ -4,7 +4,7 @@ import { formatMoney } from '../../utils/Money'
 
 let setTimeId ;
 export function Product({ loadCart, product }) {
-
+  console.log('Rendering Product:', product.image);
   const [quantity, setQuantity] = useState(1);
   
   const [added, setAdded] = useState(false);
