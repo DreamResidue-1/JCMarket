@@ -11,12 +11,22 @@ const configuredBaseUrl = (
 const useDevProxy = import.meta.env.DEV
   && /^https?:\/\/(?:localhost|127\.0\.0\.1):3000\/?$/i.test(configuredBaseUrl);
 
+const requiresCookieSession = (url = '') => (
+  url.startsWith('/api/auth/google')
+  || url.startsWith('/api/auth/login')
+  || url.startsWith('/api/auth/register')
+  || url.startsWith('/api/auth/refresh')
+  || url.startsWith('/api/auth/logout')
+);
+
+const requiresTrustedHeader = (url = '') => (
+  url.startsWith('/api/auth/refresh')
+  || url.startsWith('/api/auth/logout')
+);
+
 const api = axios.create({
   baseURL: useDevProxy ? '' : configuredBaseUrl,
-  withCredentials: true,
-  headers: {
-    'X-Requested-With': 'XMLHttpRequest',
-  },
+  withCredentials: false,
 });
 
 const sessionHintKey = 'jcmarket-has-session';
@@ -60,6 +70,14 @@ const processQueue = (error: any, token: string | null = null) => {
 };
 
 api.interceptors.request.use((config) => {
+  const requestUrl = typeof config.url === 'string' ? config.url : '';
+  config.withCredentials = requiresCookieSession(requestUrl);
+
+  if (requiresTrustedHeader(requestUrl)) {
+    config.headers = config.headers ?? {};
+    config.headers['X-Requested-With'] = 'XMLHttpRequest';
+  }
+
   if (accessToken) {
     config.headers = config.headers ?? {};
     config.headers.Authorization = `Bearer ${accessToken}`;

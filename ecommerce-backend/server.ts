@@ -49,8 +49,14 @@ const localDevOriginPatterns = [
   /^http:\/\/127\.0\.0\.1:\d+$/i
 ];
 
+const renderOriginPattern = /^https:\/\/[a-z0-9-]+\.onrender\.com$/i;
+
 const isAllowedOrigin = (origin: string) => {
   if (configuredOrigins.includes(origin)) {
+    return true;
+  }
+
+  if (renderOriginPattern.test(origin)) {
     return true;
   }
 
@@ -61,8 +67,7 @@ const isAllowedOrigin = (origin: string) => {
   return false;
 };
 
-// Middleware
-app.use(cors({
+const corsOptions = {
   origin(origin: string | undefined, callback: (error: Error | null, allow?: boolean) => void) {
     if (!origin || isAllowedOrigin(origin)) {
       callback(null, true);
@@ -71,8 +76,15 @@ app.use(cors({
 
     callback(new Error(`Origin ${origin} is not allowed by CORS.`));
   },
-  credentials: true
-}));
+  credentials: true,
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  optionsSuccessStatus: 204
+};
+
+// Middleware
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 
