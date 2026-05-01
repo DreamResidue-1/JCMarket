@@ -1,4 +1,5 @@
 import api from '../../../lib/api';
+import { resolveBackendAssetUrl } from '../../../lib/assets';
 import { useState , useRef} from 'react';
 import { formatMoney } from '../../../utils/Money';
 
@@ -41,7 +42,7 @@ const handleInput = () => {
   return (
     <>
       <img className="product-image"
-        src={cartItem.product.image} />
+        src={resolveBackendAssetUrl(cartItem.product.image)} />
 
       <div className="cart-item-details">
         <div className="product-name">

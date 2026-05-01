@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router'
+import { resolveBackendAssetUrl } from '../../lib/assets'
 import './CheckoutHeader.css'
 export function CheckoutHeader({cart}){
   let totalQuantity = 0;
@@ -24,7 +25,7 @@ export function CheckoutHeader({cart}){
           </div>
 
           <div className="checkout-header-right-section">
-            <img src="/images/icons/checkout-lock-icon.png" />
+            <img src={resolveBackendAssetUrl('/images/icons/checkout-lock-icon.png')} />
           </div>
         </div>
       </div>

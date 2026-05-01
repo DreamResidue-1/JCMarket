@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { resolveBackendAssetUrl } from '../lib/assets';
 export function DeliveryDate({order ,orderProduct}){
   const totalDeliveryTimeMs = orderProduct.estimatedDeliveryTimeMs - order.orderTimeMs;
   const timePassedMs = dayjs().valueOf() - order.orderTimeMs;
@@ -18,7 +19,7 @@ export function DeliveryDate({order ,orderProduct}){
             Quantity: {orderProduct.quantity}
           </div>
 
-          <img className="product-image" src={orderProduct.product.image} />
+          <img className="product-image" src={resolveBackendAssetUrl(orderProduct.product.image)} />
 
           <div className="progress-labels-container">
             <div className={`progress-label ${deliveryPresent < 33 ? 'current-status':''}`}> 

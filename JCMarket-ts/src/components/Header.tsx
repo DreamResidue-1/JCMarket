@@ -2,6 +2,7 @@ import {  useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { useAuth } from '../hooks/useAuthHook';
 import { getAvatarInitials, readAvatarFile } from '../lib/avatar';
+import { resolveBackendAssetUrl } from '../lib/assets';
 import { consumeCompanyNotice } from '../lib/companyNotice';
 import './Header.css';
 
@@ -198,7 +199,7 @@ export function Header({ cart }: HeaderProps) {
 
           <button className="search-button"
             type="submit">
-            <img className="search-icon" src="/images/icons/search-icon.png" />
+            <img className="search-icon" src={resolveBackendAssetUrl('/images/icons/search-icon.png')} />
           </button>
         </form>
 
@@ -222,7 +223,7 @@ export function Header({ cart }: HeaderProps) {
           )}
 
           <Link className="cart-link header-link" to="/checkout">
-            <img className="cart-icon" src="/images/icons/cart-icon.png" />
+            <img className="cart-icon" src={resolveBackendAssetUrl('/images/icons/cart-icon.png')} />
             <div className="cart-quantity">&#60;{totalQuantity}&#62;</div>
           </Link>
         </div>

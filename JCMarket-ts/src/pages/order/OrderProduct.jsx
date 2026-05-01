@@ -1,5 +1,6 @@
 import api from '../../lib/api';
 import {  useState } from "react"
+import { resolveBackendAssetUrl } from '../../lib/assets';
 import dayjs from 'dayjs';
 import { NavLink , useNavigate } from 'react-router'
 
@@ -23,7 +24,7 @@ export function OrderProduct ({orderProduct , order, loadCart}) {
     
                   <>
                     <div className="product-image-container">
-                      <img src={orderProduct.product.image} />
+                      <img src={resolveBackendAssetUrl(orderProduct.product.image)} />
                     </div>
 
                     <div className="product-details">
@@ -39,7 +40,7 @@ export function OrderProduct ({orderProduct , order, loadCart}) {
                         Quantity: {orderProduct.quantity}
                       </div>
                       <button className="buy-again-button button-primary">
-                        <img className="buy-again-icon" src="/images/icons/buy-again.png" style={{opacity: added? 1:0 }} />
+                        <img className="buy-again-icon" src={resolveBackendAssetUrl('/images/icons/buy-again.png')} style={{opacity: added? 1:0 }} />
                         <span className="buy-again-message" onClick={addToCart}>Add to Cart</span>
                       </button>
                     </div>

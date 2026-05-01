@@ -1,10 +1,10 @@
 import api from '../../lib/api';
 import { useState } from 'react';
+import { resolveBackendAssetUrl } from '../../lib/assets';
 import { formatMoney } from '../../utils/Money'
 
 let setTimeId ;
 export function Product({ loadCart, product }) {
-  console.log('Rendering Product:', product.image);
   const [quantity, setQuantity] = useState(1);
   
   const [added, setAdded] = useState(false);
@@ -29,7 +29,7 @@ export function Product({ loadCart, product }) {
     <div className="product-container">
       <div className="product-image-container">
         <img className="product-image"
-          src={product.image} />
+          src={resolveBackendAssetUrl(product.image)} />
       </div>
 
       <div className="product-name limit-text-to-2-lines">
@@ -38,7 +38,7 @@ export function Product({ loadCart, product }) {
 
       <div className="product-rating-container">
         <img className="product-rating-stars"
-          src={`/images/ratings/rating-${product.rating.stars * 10}.png`} />
+          src={resolveBackendAssetUrl(`/images/ratings/rating-${product.rating.stars * 10}.png`)} />
         <div className="product-rating-count link-primary">
           {product.rating.count}
         </div>
@@ -66,7 +66,7 @@ export function Product({ loadCart, product }) {
       <div className="product-spacer"></div>
 
       <div className="added-to-cart" style={{ opacity: added ? 1 : 0 }}>
-        <img src="/images/icons/checkmark.png" />
+        <img src={resolveBackendAssetUrl('/images/icons/checkmark.png')} />
         Added
       </div>
 
