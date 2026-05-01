@@ -35,39 +35,8 @@ const PORT = parseInt(process.env.PORT || '3005', 10);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const configuredOrigins = process.env.FRONTEND_URL
-  ? process.env.FRONTEND_URL.split(',').map((origin) => origin.trim()).filter(Boolean)
-  : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'];
-
-const localDevOriginPatterns = [
-  /^http:\/\/localhost:\d+$/i,
-  /^http:\/\/127\.0\.0\.1:\d+$/i
-];
-
-const isAllowedOrigin = (origin: string) => {
-  if (configuredOrigins.includes(origin)) {
-    return true;
-  }
-
-  if (process.env.NODE_ENV !== 'production') {
-    return localDevOriginPatterns.some((pattern) => pattern.test(origin));
-  }
-
-  return false;
-};
-
 // Middleware
-app.use(cors({
-  origin(origin: any, callback: any) {
-    if (!origin || isAllowedOrigin(origin)) {
-      callback(null, true);
-      return;
-    }
-
-    callback(new Error(`Origin ${origin} is not allowed by CORS.`));
-  },
-  credentials: true
-}));
+app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 
