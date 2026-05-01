@@ -1,4 +1,4 @@
-import { BrowserRouter } from 'react-router'
+import { HashRouter } from 'react-router'
 import { createRoot } from 'react-dom/client'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import './index.css'
@@ -7,10 +7,10 @@ import { AuthProvider } from './hooks/useAuth'
 
 createRoot(document.getElementById('root')!).render(
   <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-    <BrowserRouter>
+    <HashRouter>
       <AuthProvider>
         <App />
       </AuthProvider>
-    </BrowserRouter>
+    </HashRouter>
   </GoogleOAuthProvider>,
 )

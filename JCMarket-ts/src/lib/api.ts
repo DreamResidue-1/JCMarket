@@ -7,6 +7,7 @@ const configuredBaseUrl = (
   || import.meta.env.VITE_API_BASE_URL
   || ''
 ).trim();
+
 const useDevProxy = import.meta.env.DEV
   && /^https?:\/\/(?:localhost|127\.0\.0\.1):3000\/?$/i.test(configuredBaseUrl);
 

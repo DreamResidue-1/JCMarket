@@ -26,11 +26,12 @@ const refreshCookieName = 'refreshToken';
 const passwordResetWindowMs = 10 * 60 * 1000;
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const maxPictureLength = 3 * 1024 * 1024;
+const refreshCookieSameSite = process.env.NODE_ENV === 'production' ? 'none' : 'strict';
 
 const getRefreshCookieOptions = () => ({
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production',
-  sameSite: 'strict',
+  sameSite: refreshCookieSameSite,
   path: '/',
   maxAge: 30 * 24 * 60 * 60 * 1000
 });
@@ -39,7 +40,7 @@ const clearRefreshCookie = (res) => {
   res.clearCookie(refreshCookieName, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: refreshCookieSameSite,
     path: '/'
   });
 };

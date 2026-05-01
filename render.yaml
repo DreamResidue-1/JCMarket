@@ -1,0 +1,32 @@
+services:
+  - name: jcmarket-1
+    type: web
+    runtime: static
+    rootDir: JCMarket-ts
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./JCMarket-ts/dist
+    envVars:
+      - key: VITE_GOOGLE_CLIENT_ID
+        value: 489109189204-ve0eov52ofm0apd69d9npo5vlbjld1ru.apps.googleusercontent.com
+      - key: VITE_API_URL
+        value: ""
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://jcmarket.onrender.com/api/*
+      - type: rewrite
+        source: /images/*
+        destination: https://jcmarket.onrender.com/images/*
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+  - name: jcmarket
+    type: web
+    runtime: node
+    rootDir: ecommerce-backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: FRONTEND_URL
+        value: https://jcmarket-1.onrender.com
