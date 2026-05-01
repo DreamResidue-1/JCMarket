@@ -35,8 +35,39 @@ const PORT = parseInt(process.env.PORT || '3005', 10);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const configuredOrigins = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.split(',').map((origin) => origin.trim()).filter(Boolean)
+  : [];
+
+const localDevOriginPatterns = [
+  /^http:\/\/localhost:\d+$/i,
+  /^http:\/\/127\.0\.0\.1:\d+$/i
+];
+
+const isAllowedOrigin = (origin: string) => {
+  if (configuredOrigins.includes(origin)) {
+    return true;
+  }
+
+  if (process.env.NODE_ENV !== 'production') {
+    return localDevOriginPatterns.some((pattern) => pattern.test(origin));
+  }
+
+  return false;
+};
+
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin(origin: string | undefined, callback: (error: Error | null, allow?: boolean) => void) {
+    if (!origin || isAllowedOrigin(origin)) {
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error(`Origin ${origin} is not allowed by CORS.`));
+  },
+  credentials: true
+}));
 app.use(cookieParser());
 app.use(express.json());
 
