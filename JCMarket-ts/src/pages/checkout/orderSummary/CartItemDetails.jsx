@@ -22,8 +22,9 @@ const handleInput = () => {
   const updateQuantity = async () => {
     // Switch between true and false for isUpdatingQuantity.
     if (isUpdatingQuantity) {
+
       await api.put(`/api/cart-items/${cartItem.productId}`, {
-        quantity: Number(quantity),
+        quantity:  quantity ?  Number(quantity) : 1,
       });
       await loadCart();
       setIsUpdatingQuantity(false);
