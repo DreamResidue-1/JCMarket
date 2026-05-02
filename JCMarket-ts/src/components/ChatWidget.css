@@ -44,7 +44,12 @@ body {
   background-color: #fff;
   border-radius: 10px 10px 0 0;
 }
-
+@media (max-width: 450px) {
+  .chat-widget-container.open{
+    width: 300px;
+    height: 420px;
+  }
+}
 .chat-button {
   width: 60px;
   height: 60px;
