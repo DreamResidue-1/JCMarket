@@ -1,8 +1,11 @@
 
 import { Product } from './Product'
+import { useLanguage } from '../../i18n/LanguageContext';
 
 
 export function ProductsGrid({ loadCart, products, search, error }){
+  const { t } = useLanguage();
+
   if (error) {
     return <div className="products-state-card">{error}</div>;
   }
@@ -11,8 +14,8 @@ export function ProductsGrid({ loadCart, products, search, error }){
     return (
       <div className="products-state-card">
         {search
-          ? `No products matched "${search}". Try a broader term or a simpler spelling.`
-          : 'No products are available right now.'}
+          ? t('noProductsMatched', { search })
+          : t('noProductsAvailable')}
       </div>
     );
   }

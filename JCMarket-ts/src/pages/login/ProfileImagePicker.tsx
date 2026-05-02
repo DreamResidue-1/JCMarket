@@ -1,4 +1,5 @@
 import { useId, useRef, useState } from 'react';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 const defaultImageUrl = 'https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg';
 const maxImageSizeBytes = 2 * 1024 * 1024;
@@ -16,6 +17,7 @@ export function ProfileImagePicker({
   value,
   variant = 'inline'
 }: ProfileImagePickerProps) {
+  const { t } = useLanguage();
   const inputId = useId();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [localError, setLocalError] = useState('');
@@ -65,7 +67,7 @@ export function ProfileImagePicker({
         <img className="profile-pic" src={imageSource} alt={label} />
         <div className="p-image">
           <button
-            aria-label="Choose profile image"
+            aria-label={t('chooseProfileImage')}
             className="upload-button"
             type="button"
             onClick={openFilePicker}
@@ -86,8 +88,8 @@ export function ProfileImagePicker({
       </div>
 
       <div className="auth-image-picker-copy">
-        <strong>Profile image</strong>
-        <span>Click the camera icon to upload your picture.</span>
+        <strong>{t('profileImage')}</strong>
+        <span>{t('profileImageHelp')}</span>
       </div>
 
       {localError && <div className="auth-error">{localError}</div>}

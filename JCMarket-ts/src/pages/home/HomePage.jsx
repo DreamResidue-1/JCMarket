@@ -2,10 +2,12 @@ import api from '../../lib/api';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { Header } from '../../components/Header';
+import { useLanguage } from '../../i18n/LanguageContext';
 import { ProductsGrid } from './ProductsGrid';
 import './HomePage.css';
 
 export function HomePage({ cart, loadCart }) {
+  const { t } = useLanguage();
   const [products, setProducts] = useState([]);
   const [error, setError] = useState('');
   const [searchParams] = useSearchParams();
@@ -26,12 +28,12 @@ export function HomePage({ cart, loadCart }) {
         setError('');
       } catch (loadError) {
         setProducts([]);
-        setError(loadError instanceof Error ? loadError.message : 'Failed to load products.');
+        setError(loadError instanceof Error ? loadError.message : t('failedToLoadProducts'));
       }
     };
 
     void getHomeData();
-  }, [search]);
+  }, [search, t]);
 
   return (
     <>

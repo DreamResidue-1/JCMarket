@@ -1,11 +1,13 @@
 import api from '../../lib/api';
 import {  useState } from "react"
+import { useLanguage } from '../../i18n/LanguageContext';
 import { resolveBackendAssetUrl } from '../../lib/assets';
 import dayjs from 'dayjs';
 import { NavLink , useNavigate } from 'react-router'
 
 
 export function OrderProduct ({orderProduct , order, loadCart}) {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [added, setAdded] =useState(false);
   const addToCart = async()=>{
@@ -32,23 +34,23 @@ export function OrderProduct ({orderProduct , order, loadCart}) {
                         {orderProduct.product.name}
                       </div>
                       <div className="product-delivery-date">
-                        Arriving on: {
+                        {t('arrivingOn')}: {
                           dayjs(orderProduct.product.estimatedDeliveryTimeMs).format('MMMM D')
                         }
                       </div>
                       <div className="product-quantity">
-                        Quantity: {orderProduct.quantity}
+                        {t('quantity')}: {orderProduct.quantity}
                       </div>
                       <button className="buy-again-button button-primary">
                         <img className="buy-again-icon" src={resolveBackendAssetUrl('/images/icons/buy-again.png')} style={{opacity: added? 1:0 }} />
-                        <span className="buy-again-message" onClick={addToCart}>Add to Cart</span>
+                        <span className="buy-again-message" onClick={addToCart}>{t('addToCart')}</span>
                       </button>
                     </div>
 
                     <div className="product-actions">
                       <NavLink to={`/tracking/${order.id}/${orderProduct.product.id}`}>
                         <button className="track-package-button button-secondary">
-                          Track package
+                          {t('trackPackage')}
                         </button>
                       </NavLink>
                     </div>

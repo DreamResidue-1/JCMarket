@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLanguage } from '../../i18n/LanguageContext';
 
 type AuthPasswordFieldProps = {
   autoComplete?: string;
@@ -16,6 +17,7 @@ export function AuthPasswordField({
   value
 }: AuthPasswordFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <div className="auth-field">
@@ -36,7 +38,7 @@ export function AuthPasswordField({
             setShowPassword((currentValue) => !currentValue);
           }}
         >
-          {showPassword ? 'Hide' : 'Show'}
+          {showPassword ? t('hide') : t('show')}
         </button>
       </div>
     </div>

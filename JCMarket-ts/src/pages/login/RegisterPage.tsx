@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../../hooks/useAuthHook';
+import { useLanguage } from '../../i18n/LanguageContext';
 import { AuthPasswordField } from './AuthPasswordField';
 import { ProfileImagePicker } from './ProfileImagePicker';
 import './AuthPages.css';
 
 export function RegisterPage() {
   const { register, isAuthenticated, error, clearError } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -28,7 +30,7 @@ export function RegisterPage() {
     clearError();
 
     if (password !== confirmPassword) {
-      setLocalError('Passwords do not match.');
+      setLocalError(t('passwordsDoNotMatch'));
       return;
     }
 
@@ -48,20 +50,20 @@ export function RegisterPage() {
     <div className="auth-page">
       <div className="auth-card auth-card-with-corner-image">
         <ProfileImagePicker
-          label={name || email || 'New member'}
+          label={name || email || t('newMember')}
           value={picture}
           onChange={setPicture}
           variant="corner"
         />
-        <p className="auth-eyebrow">Join JCMarket</p>
-        <h1>Create account</h1>
+        <p className="auth-eyebrow">{t('joinJCMarket')}</p>
+        <h1>{t('createAccount')}</h1>
         <p className="auth-copy">
-          This replaces the old PHP register form with a real React and Node flow.
+          {t('registerCopy')}
         </p>
 
         <form className="auth-form" onSubmit={handleRegister}>
           <div className="auth-field">
-            <label htmlFor="register-name">Name</label>
+            <label htmlFor="register-name">{t('name')}</label>
             <input
               id="register-name"
               type="text"
@@ -73,7 +75,7 @@ export function RegisterPage() {
           </div>
 
           <div className="auth-field">
-            <label htmlFor="register-email">Email</label>
+            <label htmlFor="register-email">{t('email')}</label>
             <input
               id="register-email"
               type="email"
@@ -86,7 +88,7 @@ export function RegisterPage() {
 
           <AuthPasswordField
             id="register-password"
-            label="Password"
+            label={t('password')}
             value={password}
             onChange={setPassword}
             autoComplete="new-password"
@@ -94,21 +96,21 @@ export function RegisterPage() {
 
           <AuthPasswordField
             id="register-password-confirm"
-            label="Confirm password"
+            label={t('confirmPassword')}
             value={confirmPassword}
             onChange={setConfirmPassword}
             autoComplete="new-password"
           />
 
           <button className="auth-primary-button" type="submit" disabled={submitting}>
-            {submitting ? 'Creating account...' : 'Create Account'}
+            {submitting ? t('creatingAccount') : t('createAccount')}
           </button>
         </form>
 
         {(localError || error) && <div className="auth-error">{localError || error}</div>}
 
         <div className="auth-footer">
-          Already have an account? <Link to="/login">Sign in</Link>
+          {t('alreadyHaveAccount')} <Link to="/login">{t('signIn')}</Link>
         </div>
       </div>
     </div>

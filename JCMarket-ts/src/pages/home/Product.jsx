@@ -1,10 +1,12 @@
 import api from '../../lib/api';
 import { useState } from 'react';
+import { useLanguage } from '../../i18n/LanguageContext';
 import { resolveBackendAssetUrl } from '../../lib/assets';
 import { formatMoney } from '../../utils/Money'
 
 let setTimeId ;
 export function Product({ loadCart, product }) {
+  const { t } = useLanguage();
   const [quantity, setQuantity] = useState(1);
   
   const [added, setAdded] = useState(false);
@@ -67,12 +69,12 @@ export function Product({ loadCart, product }) {
 
       <div className="added-to-cart" style={{ opacity: added ? 1 : 0 }}>
         <img src={resolveBackendAssetUrl('/images/icons/checkmark.png')} />
-        Added
+        {t('added')}
       </div>
 
       <button className="add-to-cart-button button-primary"
         onClick={addToCart}>
-        Add to Cart
+        {t('addToCart')}
       </button>
     </div>
   )

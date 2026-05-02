@@ -1,13 +1,15 @@
 import dayjs from 'dayjs';
 import { resolveBackendAssetUrl } from '../lib/assets';
+import { useLanguage } from '../i18n/LanguageContext';
 export function DeliveryDate({order ,orderProduct}){
+  const { t } = useLanguage();
   const totalDeliveryTimeMs = orderProduct.estimatedDeliveryTimeMs - order.orderTimeMs;
   const timePassedMs = dayjs().valueOf() - order.orderTimeMs;
   const deliveryPresent = (timePassedMs / totalDeliveryTimeMs ) * 100;
   return (
     <>  
            <div className="delivery-date">
-            { deliveryPresent >= 100 ? 'Delivered on ' :  'Arriving on'}
+            { deliveryPresent >= 100 ? `${t('deliveredOn')} ` : `${t('arrivingOn')} `}
              {dayjs(orderProduct.estimatedDeliveryTimeMs).format('dddd, MMMM D')}
           </div>
 
@@ -16,20 +18,20 @@ export function DeliveryDate({order ,orderProduct}){
           </div>
 
           <div className="product-info">
-            Quantity: {orderProduct.quantity}
+            {t('quantity')}: {orderProduct.quantity}
           </div>
 
           <img className="product-image" src={resolveBackendAssetUrl(orderProduct.product.image)} />
 
           <div className="progress-labels-container">
             <div className={`progress-label ${deliveryPresent < 33 ? 'current-status':''}`}> 
-              Preparing
+              {t('preparing')}
             </div>
             <div className={`progress-label ${ deliveryPresent >= 33 && deliveryPresent < 100? 'current-status':''}`}>
-              Shipped
+              {t('shipped')}
             </div>
             <div className={`progress-label ${deliveryPresent >= 100 ? 'current-status':''}`}>
-              Delivered
+              {t('delivered')}
             </div>
           </div>
 

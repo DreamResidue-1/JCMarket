@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../../hooks/useAuthHook';
+import { useLanguage } from '../../i18n/LanguageContext';
 import { AuthPasswordField } from './AuthPasswordField';
 import './AuthPages.css';
 
 export function ForgotPasswordPage() {
   const { requestPasswordReset, resetPassword, error, clearError } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -58,17 +60,16 @@ export function ForgotPasswordPage() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <p className="auth-eyebrow">Password Recovery</p>
-        <h1>Reset password</h1>
+        <p className="auth-eyebrow">{t('passwordRecovery')}</p>
+        <h1>{t('resetPassword')}</h1>
         <p className="auth-copy">
-          Request a reset code, then confirm it here with your new password. Use the
-          same email you signed up with. Google-only accounts do not use password reset codes.
+          {t('forgotCopy')}
         </p>
 
         {step === 'request' ? (
           <form className="auth-form" onSubmit={handleRequestCode}>
             <div className="auth-field">
-              <label htmlFor="reset-email">Email</label>
+              <label htmlFor="reset-email">{t('email')}</label>
               <input
                 id="reset-email"
                 type="email"
@@ -80,13 +81,13 @@ export function ForgotPasswordPage() {
             </div>
 
             <button className="auth-primary-button" type="submit" disabled={submitting}>
-              {submitting ? 'Sending code...' : 'Send Reset Code'}
+              {submitting ? t('sendingCode') : t('sendResetCode')}
             </button>
           </form>
         ) : (
           <form className="auth-form" onSubmit={handleResetPassword}>
             <div className="auth-field">
-              <label htmlFor="confirm-email">Email</label>
+              <label htmlFor="confirm-email">{t('email')}</label>
               <input
                 id="confirm-email"
                 type="email"
@@ -98,7 +99,7 @@ export function ForgotPasswordPage() {
             </div>
 
             <div className="auth-field">
-              <label htmlFor="reset-code">Reset code</label>
+              <label htmlFor="reset-code">{t('resetCode')}</label>
               <input
                 id="reset-code"
                 type="text"
@@ -110,14 +111,14 @@ export function ForgotPasswordPage() {
 
             <AuthPasswordField
               id="new-password"
-              label="New password"
+              label={t('newPassword')}
               value={newPassword}
               onChange={setNewPassword}
               autoComplete="new-password"
             />
 
             <button className="auth-primary-button" type="submit" disabled={submitting}>
-              {submitting ? 'Updating password...' : 'Update Password'}
+              {submitting ? t('updatingPassword') : t('updatePassword')}
             </button>
 
             <button
@@ -135,7 +136,7 @@ export function ForgotPasswordPage() {
                 clearError();
               }}
             >
-              Start Over
+              {t('startOver')}
             </button>
           </form>
         )}
@@ -143,19 +144,19 @@ export function ForgotPasswordPage() {
         {message && <div className="auth-message">{message}</div>}
         {deliveryMethod === 'email' && (
           <div className="auth-message">
-            JCMarket sent the reset code from the backend to the email address you entered.
+            {t('resetCodeEmailSent')}
           </div>
         )}
         {developmentCode && (
           <div className="auth-dev-code">
-            Development reset code:
+            {t('developmentResetCode')}
             <strong>{developmentCode}</strong>
           </div>
         )}
         {(localError || error) && <div className="auth-error">{localError || error}</div>}
 
         <div className="auth-footer">
-          <Link to="/login">Back to sign in</Link>
+          <Link to="/login">{t('backToSignIn')}</Link>
         </div>
       </div>
     </div>

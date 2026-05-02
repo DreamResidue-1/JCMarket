@@ -3,12 +3,14 @@ import { Link, useNavigate } from 'react-router';
 import { GoogleLogin } from '@react-oauth/google';
 import type { CredentialResponse } from '@react-oauth/google';
 import { useAuth } from '../../hooks/useAuthHook';
+import { useLanguage } from '../../i18n/LanguageContext';
 import { AuthPasswordField } from './AuthPasswordField';
 import { AuthProfilePreview } from './AuthProfilePreview';
 import './AuthPages.css';
 
 export function LoginPage() {
   const { loginWithGoogle, loginWithPassword, isAuthenticated, error, clearError, isLoading } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -57,18 +59,18 @@ export function LoginPage() {
     <div className="auth-page">
       <div className="auth-card">
         <AuthProfilePreview
-          label={email || 'Your account'}
-          title="Login corner"
+          label={email || t('yourAccount')}
+          title={t('loginCorner')}
         />
-        <p className="auth-eyebrow">Welcome Back</p>
-        <h1>Sign in</h1>
+        <p className="auth-eyebrow">{t('welcomeBack')}</p>
+        <h1>{t('signInTitle')}</h1>
         <p className="auth-copy">
-          Use your email and password, or continue with Google below.
+          {t('loginCopy')}
         </p>
 
         <form className="auth-form" onSubmit={handlePasswordLogin}>
           <div className="auth-field">
-            <label htmlFor="login-email">Email</label>
+            <label htmlFor="login-email">{t('email')}</label>
             <input
               id="login-email"
               type="email"
@@ -81,24 +83,24 @@ export function LoginPage() {
 
           <AuthPasswordField
             id="login-password"
-            label="Password"
+            label={t('password')}
             value={password}
             onChange={setPassword}
             autoComplete="current-password"
           />
 
           <button className="auth-primary-button" type="submit" disabled={submitting || isLoading}>
-            {submitting ? 'Signing in...' : 'Sign In'}
+            {submitting ? t('signingIn') : t('signIn')}
           </button>
         </form>
 
         <div className="auth-links">
-          <Link to="/forgot-password">Forgot password?</Link>
-          <Link to="/signup">Create account</Link>
+          <Link to="/forgot-password">{t('forgotPassword')}</Link>
+          <Link to="/signup">{t('createAccount')}</Link>
         </div>
 
         <div className="auth-divider">
-          <span>Or continue with</span>
+          <span>{t('orContinueWith')}</span>
         </div>
 
         <div className="auth-google">
@@ -117,7 +119,7 @@ export function LoginPage() {
         {error && <div className="auth-error">{error}</div>}
 
         <div className="auth-footer">
-          New here? <Link to="/signup">Create your account</Link>
+          {t('newHere')} <Link to="/signup">{t('createYourAccount')}</Link>
         </div>
       </div>
     </div>

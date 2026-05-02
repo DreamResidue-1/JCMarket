@@ -2,10 +2,12 @@ import api from '../../lib/api'
 import { OrdersGrid } from './OrdersGrid'
 import { useState, useEffect } from 'react'
 import { Header } from '../../components/Header'
+import { useLanguage } from '../../i18n/LanguageContext';
 import './OrdersPage.css'
 
 
 export function OrdersPage({loadCart, cart }) {
+  const { t } = useLanguage();
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export function OrdersPage({loadCart, cart }) {
       <title>Orders</title>
       <Header cart={cart} />
       <div className="orders-page">
-        <div className="page-title">Your Orders</div>
+        <div className="page-title">{t('ordersPageTitle')}</div>
       
       <OrdersGrid loadCart={loadCart} orders={orders} />
         

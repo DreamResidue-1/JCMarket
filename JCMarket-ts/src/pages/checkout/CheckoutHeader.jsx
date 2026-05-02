@@ -1,7 +1,9 @@
 import { NavLink } from 'react-router'
+import { useLanguage } from '../../i18n/LanguageContext'
 import { resolveBackendAssetUrl } from '../../lib/assets'
 import './CheckoutHeader.css'
 export function CheckoutHeader({cart}){
+  const { t } = useLanguage();
   let totalQuantity = 0;
   cart.forEach(cartItem => {
   totalQuantity += cartItem.quantity;
@@ -20,8 +22,8 @@ export function CheckoutHeader({cart}){
           </div>
 
           <div className="checkout-header-middle-section">
-            Checkout (<NavLink className="return-to-home-link"
-              to="/">{totalQuantity > 1 ?  totalQuantity + ' items' : totalQuantity + ' item'} </NavLink>)
+            {t('checkout')} (<NavLink className="return-to-home-link"
+              to="/">{t('itemCount', { count: totalQuantity })} </NavLink>)
           </div>
 
           <div className="checkout-header-right-section">
