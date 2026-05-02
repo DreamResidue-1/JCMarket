@@ -461,3 +461,8 @@ html[dir='rtl'] .company-notice {
     max-width: none;
   }
 }
+.site-header__drawer-language{
+  color: black;
+  font-size: 15px;
+  font-weight: 700;
+}
