@@ -1,5 +1,5 @@
 services:
-  - name: jcmarket-1
+  - name: jcmarket
     type: web
     runtime: static
     rootDir: JCMarket-ts
@@ -31,4 +31,4 @@ services:
       - key: GOOGLE_CLIENT_ID
         value: 489109189204-ve0eov52ofm0apd69d9npo5vlbjld1ru.apps.googleusercontent.com
       - key: FRONTEND_URL
-        value: https://jcmarket-1.onrender.com
+        value: https://jcmarket.onrender.com

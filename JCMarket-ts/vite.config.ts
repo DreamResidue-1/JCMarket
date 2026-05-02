@@ -11,11 +11,11 @@ export default defineConfig({
   server:{ 
     proxy:{
       '/api':{
-        target: 'https://jcmarket.onrender.com'
+        target: 'https://jcmarketbackend.onrender.com'
       }, 
       
       '/images':{
-        target: 'https://jcmarket.onrender.com'
+        target: 'https://jcmarketbackend.onrender.com'
       }
     }
   }
