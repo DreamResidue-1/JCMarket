@@ -173,7 +173,33 @@ export function Header({ cart }: HeaderProps) {
             <span className="site-header__brand-desktop">JCMarket</span>
             <span className="site-header__brand-mobile">JC</span>
           </Link>
+    
+          {user && (
+              <div className="site-header__user">
+                <button
+                  type="button"
+                  className="site-header__avatar-button"
+                  onClick={openAvatarPicker}
+                  disabled={isUpdatingAvatar}
+                  title={avatarTitle}
+                >
+                  {avatarPreview ? (
+                    <img src={avatarPreview} alt={user.email} className="site-header__avatar-image" />
+                  ) : (
+                    <div className="site-header__avatar-image site-header__avatar-fallback">
+                      {getAvatarInitials(user.email)}
+                    </div>
+                  )}
+                  <span className="site-header__avatar-edit">{isUpdatingAvatar ? '...' : '+'}</span>
+                </button>
 
+                <span className="site-header__user-email">{user.email}</span>
+
+                <button type="button" className="site-header__nav-link site-header__logout" onClick={logout}>
+                  {t('logout')}
+                </button>
+              </div>
+            )} 
           <form className="site-header__search" onSubmit={searchProducts}>
             <input
               className="site-header__search-input"
@@ -245,32 +271,7 @@ export function Header({ cart }: HeaderProps) {
               </button>
             </div>
 
-            {user && (
-              <div className="site-header__user">
-                <button
-                  type="button"
-                  className="site-header__avatar-button"
-                  onClick={openAvatarPicker}
-                  disabled={isUpdatingAvatar}
-                  title={avatarTitle}
-                >
-                  {avatarPreview ? (
-                    <img src={avatarPreview} alt={user.email} className="site-header__avatar-image" />
-                  ) : (
-                    <div className="site-header__avatar-image site-header__avatar-fallback">
-                      {getAvatarInitials(user.email)}
-                    </div>
-                  )}
-                  <span className="site-header__avatar-edit">{isUpdatingAvatar ? '...' : '+'}</span>
-                </button>
-
-                <span className="site-header__user-email">{user.email}</span>
-
-                <button type="button" className="site-header__nav-link site-header__logout" onClick={logout}>
-                  {t('logout')}
-                </button>
-              </div>
-            )}
+          
           </div>
 
           <button
