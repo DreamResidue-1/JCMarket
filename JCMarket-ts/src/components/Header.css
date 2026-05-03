@@ -142,7 +142,7 @@
 }
 
 .site-header__language-toggle {
-  display: inline-flex;
+  display: inline;
   align-items: center;
   gap: 4px;
   padding: 4px;
@@ -490,13 +490,14 @@ html[dir='rtl'] .company-notice {
   padding:0;
 }
 .site-header__cart-count{
-  top: 12px;
-  right: 6px;
+  top: 24px;
+  right: 12px;
   min-width: 22px;
   height: 22px;
   padding: 0 6px;
   font-size: 13px;
-  background: rgba(255, 255, 255, 0.14);
+  background-color: #1d0055;
+  color:white;
   &{
     padding: 0;
     overflow: visible;
