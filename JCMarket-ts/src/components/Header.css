@@ -419,9 +419,15 @@ html[dir='rtl'] .company-notice {
   .site-header__desktop {
     display: none;
   }
-
+  
   .site-header__menu-button {
     display: inline-block;
+  }
+}
+
+@media (min-width: 960px){
+  .site-header__drawer {
+    display: none;
   }
 }
 
