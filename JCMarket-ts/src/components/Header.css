@@ -473,7 +473,7 @@ html[dir='rtl'] .company-notice {
 }
 
 .site-header__search-input{
-  border: none;
+  border-radius: 0;
 }
 .site-header__search-button{
   border-radius: 0;
@@ -503,6 +503,7 @@ html[dir='rtl'] .company-notice {
 }
 .site-header__search-input{
   border-radius: 0;
+  max-height: 40px;
 }
 
 .site-header__drawer span{
