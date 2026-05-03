@@ -466,3 +466,37 @@ html[dir='rtl'] .company-notice {
   font-size: 15px;
   font-weight: 700;
 }
+
+.site-header__search{
+  border: 1px solid #424242;
+  border-radius: 5px;
+}
+
+.site-header__search-input{
+  border: none;
+}
+.site-header__search-button{
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.site-header__cart-icon{
+  width: 84px;
+  height: 84px;
+}
+.site-header__cart-count{
+  top: 12px;
+  right: 6px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  font-size: 13px;
+  &{
+    padding: 0;
+    overflow: visible;
+  }
+}
+.site-header__drawer{
+  background: linear-gradient(135deg, #4a00e0 0%, #8e2de2 100%);
+}
