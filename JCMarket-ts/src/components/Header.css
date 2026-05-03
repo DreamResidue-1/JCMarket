@@ -100,10 +100,10 @@
   line-height: 1;
   border-radius: 999px;
   cursor: pointer;
-  width: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 15px; /* Adjusted padding for better click area */
 }
 
 .site-header__nav-link:hover,
