@@ -7,9 +7,9 @@ services:
     staticPublishPath: dist
     envVars:
       - key: VITE_GOOGLE_CLIENT_ID
-        value: 489109189204-ve0eov52ofm0apd69d9npo5vlbjld1ru.apps.googleusercontent.com
+        value: 489109189204-q3v366mm8ed5sht13bn7ra7vpqf1ujtn.apps.googleusercontent.com
       - key: VITE_API_URL
-        value: ""
+        value: "https://jcmarketbackend.onrender.com"
     routes:
       - type: rewrite
         source: /api/*
@@ -30,6 +30,6 @@ services:
     startCommand: npm start
     envVars:
       - key: GOOGLE_CLIENT_ID
-        value: 489109189204-ve0eov52ofm0apd69d9npo5vlbjld1ru.apps.googleusercontent.com
+        value: 489109189204-q3v366mm8ed5sht13bn7ra7vpqf1ujtn.apps.googleusercontent.com
       - key: FRONTEND_URL
         value: https://jcmarket.onrender.com
