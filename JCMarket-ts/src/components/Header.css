@@ -98,9 +98,9 @@
   font-size: 14px;
   font-weight: 700;
   line-height: 1;
-  padding: 10px 12px;
   border-radius: 999px;
   cursor: pointer;
+  height: 38px;
 }
 
 .site-header__nav-link:hover,
@@ -491,6 +491,7 @@ html[dir='rtl'] .company-notice {
   padding:0;
 }
 .site-header__cart-count{
+  position:fixed;
   top: -5px;
   right: 6px;
   min-width: 22px;
@@ -500,7 +501,8 @@ html[dir='rtl'] .company-notice {
   background-color: #1d0055;
   color:white;
   overflow: visible;
-  &{
+  *&{
+    overflow: visible;
     padding: 0;
   }
 }
