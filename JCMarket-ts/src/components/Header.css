@@ -498,9 +498,9 @@ html[dir='rtl'] .company-notice {
   font-size: 13px;
   background-color: #1d0055;
   color:white;
+  overflow: visible;
   &{
     padding: 0;
-    overflow: visible;
   }
 }
 .site-header__drawer{
