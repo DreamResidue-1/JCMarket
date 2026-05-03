@@ -108,6 +108,9 @@
 .site-header__logout:hover {
   background: rgba(255, 255, 255, 0.14);
 }
+.site-header__cart-link:hover{
+  padding: -20;
+}
 
 .site-header__cart-link {
   position: relative;
@@ -481,8 +484,8 @@ html[dir='rtl'] .company-notice {
 }
 
 .site-header__cart-icon{
-  width: 84px;
-  height: 84px;
+  width: 74px;
+  height: 74px;
   margin: -20px;
   padding:0;
 }
@@ -493,6 +496,7 @@ html[dir='rtl'] .company-notice {
   height: 22px;
   padding: 0 6px;
   font-size: 13px;
+  background: rgba(255, 255, 255, 0.14);
   &{
     padding: 0;
     overflow: visible;
@@ -510,10 +514,6 @@ html[dir='rtl'] .company-notice {
   color: white;
 }
 
-.site-header__language-toggle{
-  display: flex;
-  flex-direction: row;
-}
 
 .site-header__drawer-link{
   border-radius: 5px;
