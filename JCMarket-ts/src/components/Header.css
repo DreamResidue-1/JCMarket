@@ -491,7 +491,7 @@ html[dir='rtl'] .company-notice {
   padding:0;
 }
 .site-header__cart-count{
-  position:fixed;
+  position:sticky;
   top: -5px;
   right: 6px;
   min-width: 22px;
