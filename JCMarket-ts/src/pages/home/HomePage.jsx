@@ -37,7 +37,7 @@ export function HomePage({ cart, loadCart }) {
 
   return (
     <>
-      <title>Ecommerce Project</title>
+      <title>JCMarket</title>
 
       <Header cart={cart} />
 
