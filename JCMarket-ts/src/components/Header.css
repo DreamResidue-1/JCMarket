@@ -107,6 +107,7 @@
 .site-header__cart-link:hover,
 .site-header__logout:hover {
   background: rgba(255, 255, 255, 0.14);
+  height: 38px;
 }
 .site-header__cart-link:hover{
   padding: -20;
@@ -519,7 +520,6 @@ html[dir='rtl'] .company-notice {
 .site-header__drawer-link{
   border-radius: 5px;
 }
-.site-header__header-link{
-  padding: 0;
+.site-header__cart-icon{
   overflow: visible;
 }
