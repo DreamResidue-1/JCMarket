@@ -468,7 +468,7 @@ html[dir='rtl'] .company-notice {
 }
 
 .site-header__search{
-  border: 1px solid #424242;
+  border: 2px solid #111111;
   border-radius: 5px;
 }
 
@@ -476,7 +476,7 @@ html[dir='rtl'] .company-notice {
   border: none;
 }
 .site-header__search-button{
-  border: none;
+  border-radius: 0;
   cursor: pointer;
 }
 
@@ -501,7 +501,7 @@ html[dir='rtl'] .company-notice {
   background: linear-gradient(135deg, #4a00e0 0%, #8e2de2 100%);
 }
 .site-header__search-input{
-  border:none;
+  border-radius: 0;
 }
 
 .site-header__drawer span{
@@ -510,4 +510,5 @@ html[dir='rtl'] .company-notice {
 
 .site-header__language-toggle{
   display: flex;
+  flex-direction: row;
 }
