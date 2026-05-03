@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { GoogleLogin } from '@react-oauth/google';
 import type { CredentialResponse } from '@react-oauth/google';
@@ -7,6 +7,27 @@ import { useLanguage } from '../../i18n/LanguageContext';
 import { AuthPasswordField } from './AuthPasswordField';
 import { AuthProfilePreview } from './AuthProfilePreview';
 import './AuthPages.css';
+
+const GoogleSignInButton = memo(function GoogleSignInButton({
+  onSuccess
+}: {
+  onSuccess: (credentialResponse: CredentialResponse) => Promise<void>;
+}) {
+  return (
+    <div className="auth-google">
+      <GoogleLogin
+        onSuccess={onSuccess}
+        onError={() => {
+          // Error state is managed by the auth provider when the credential reaches the API.
+        }}
+        theme="outline"
+        size="large"
+        text="continue_with"
+        shape="rectangular"
+      />
+    </div>
+  );
+});
 
 export function LoginPage() {
   const { loginWithGoogle, loginWithPassword, isAuthenticated, error, clearError, isLoading } = useAuth();
@@ -37,7 +58,7 @@ export function LoginPage() {
     }
   };
 
-  const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
+  const handleGoogleSuccess = useCallback(async (credentialResponse: CredentialResponse) => {
     if (!credentialResponse.credential) {
       return;
     }
@@ -53,7 +74,7 @@ export function LoginPage() {
     } finally {
       setSubmitting(false);
     }
-  };
+  }, [clearError, loginWithGoogle, navigate]);
 
   return (
     <div className="auth-page">
@@ -103,18 +124,7 @@ export function LoginPage() {
           <span>{t('orContinueWith')}</span>
         </div>
 
-        <div className="auth-google">
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={() => {
-              // Error state is managed by the auth provider when the credential reaches the API.
-            }}
-            theme="outline"
-            size="large"
-            text="continue_with"
-            shape="rectangular"
-          />
-        </div>
+        <GoogleSignInButton onSuccess={handleGoogleSuccess} />
 
         {error && <div className="auth-error">{error}</div>}
 
