@@ -477,13 +477,13 @@ html[dir='rtl'] .company-notice {
 }
 .site-header__search-button{
   border: none;
-  background: transparent;
   cursor: pointer;
 }
 
 .site-header__cart-icon{
   width: 84px;
   height: 84px;
+  padding: -10px;
 }
 .site-header__cart-count{
   top: 12px;
@@ -499,4 +499,15 @@ html[dir='rtl'] .company-notice {
 }
 .site-header__drawer{
   background: linear-gradient(135deg, #4a00e0 0%, #8e2de2 100%);
+}
+.site-header__search-input{
+  border:none;
+}
+
+.site-header__drawer span{
+  color: white;
+}
+
+.site-header__language-toggle{
+  display: flex;
 }
