@@ -40,7 +40,7 @@ services:
       - key: REFRESH_TOKEN_SECRET
         generateValue: true
       - key: ADMIN_EMAILS
-        value: admin@example.com
+        value: thegames-ye.online@gmail.com
       - key: FRONTEND_URL
         value: https://jcmarket.onrender.com
       - key: DB_TYPE
