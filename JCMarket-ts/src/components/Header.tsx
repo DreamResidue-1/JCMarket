@@ -169,7 +169,7 @@ export function Header({ cart }: HeaderProps) {
         )}
 
         <div className="site-header__inner">
-          <div>
+          <div style={{display: 'flex'}}>
 
           <Link to="/" className="site-header__brand" aria-label="JCMarket">
             <span className="site-header__brand-desktop">JCMarket</span>
