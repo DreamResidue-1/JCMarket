@@ -6,7 +6,30 @@ import App from './App.tsx'
 import { AuthProvider } from './hooks/useAuth'
 import { LanguageProvider } from './i18n/LanguageContext'
 
-const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+const defaultGoogleClientId = '489109189204-q3v366mm8ed5sht13bn7ra7vpqf1ujtn.apps.googleusercontent.com';
+
+const getGoogleClientId = () => {
+  const candidateValues = [
+    import.meta.env.VITE_GOOGLE_CLIENT_ID,
+    import.meta.env.VITE_GOOGLE_CLIENT_IDS?.split(',')[0],
+    import.meta.env.VITE_GOOGLE_WEB_CLIENT_ID,
+    defaultGoogleClientId
+  ];
+
+  for (const value of candidateValues) {
+    if (typeof value === 'string' && value.trim()) {
+      return value.trim();
+    }
+  }
+
+  return '';
+};
+
+const googleClientId = getGoogleClientId();
+
+if (!googleClientId) {
+  console.error('Google OAuth client ID is missing.');
+}
 
 createRoot(document.getElementById('root')!).render(
   <GoogleOAuthProvider clientId={googleClientId}>
