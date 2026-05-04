@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 
 const DEFAULT_FROM = 'JCMarket <no-reply@jcmarket.local>';
+const EMAIL_PROVIDER_NAMES = new Set(['auto', 'smtp', 'resend', 'sendgrid']);
 
 const getBooleanEnv = (value, fallback = false) => {
   if (typeof value !== 'string') {
@@ -43,6 +44,18 @@ const normalizeEnvText = (value) => {
   return trimmedValue;
 };
 
+const parsePositiveInt = (value, fallback) => {
+  const parsedValue = Number.parseInt(value || '', 10);
+
+  if (!Number.isFinite(parsedValue) || parsedValue <= 0) {
+    return fallback;
+  }
+
+  return parsedValue;
+};
+
+const parseSmtpPort = (value, fallback = 587) => parsePositiveInt(value, fallback);
+
 const normalizeSmtpPassword = (host, value) => {
   const normalizedValue = normalizeEnvText(value);
 
@@ -59,16 +72,6 @@ const normalizeSmtpPassword = (host, value) => {
   return trimmedValue;
 };
 
-const parseSmtpPort = (value, fallback = 587) => {
-  const parsedPort = Number.parseInt(value || '', 10);
-
-  if (!Number.isFinite(parsedPort) || parsedPort <= 0) {
-    return fallback;
-  }
-
-  return parsedPort;
-};
-
 const extractEmailAddress = (value = '') => {
   if (typeof value !== 'string') {
     return '';
@@ -83,6 +86,31 @@ const extractEmailAddress = (value = '') => {
   const candidate = bracketMatch ? bracketMatch[1].trim() : trimmedValue;
 
   return candidate.includes('@') ? candidate : '';
+};
+
+const parseFromAddress = (value = '') => {
+  if (typeof value !== 'string') {
+    return { email: '', name: '' };
+  }
+
+  const trimmedValue = value.trim();
+  if (!trimmedValue) {
+    return { email: '', name: '' };
+  }
+
+  const bracketMatch = trimmedValue.match(/^(.*)<([^>]+)>$/);
+
+  if (bracketMatch) {
+    return {
+      name: bracketMatch[1].trim().replace(/^"|"$/g, ''),
+      email: bracketMatch[2].trim().toLowerCase()
+    };
+  }
+
+  return {
+    name: '',
+    email: trimmedValue.toLowerCase()
+  };
 };
 
 const isPlaceholderFromAddress = (value = '') => {
@@ -163,6 +191,9 @@ const getMailConfig = () => {
     getFirstEnvValue('SMTP_TLS_REJECT_UNAUTHORIZED', 'MAIL_TLS_REJECT_UNAUTHORIZED', 'EMAIL_TLS_REJECT_UNAUTHORIZED'),
     true
   );
+  const connectionTimeout = parsePositiveInt(getFirstEnvValue('SMTP_CONNECTION_TIMEOUT_MS'), 15000);
+  const greetingTimeout = parsePositiveInt(getFirstEnvValue('SMTP_GREETING_TIMEOUT_MS'), 10000);
+  const socketTimeout = parsePositiveInt(getFirstEnvValue('SMTP_SOCKET_TIMEOUT_MS'), 30000);
 
   return {
     host,
@@ -171,14 +202,222 @@ const getMailConfig = () => {
     pass,
     from,
     secure,
-    rejectUnauthorized
+    rejectUnauthorized,
+    connectionTimeout,
+    greetingTimeout,
+    socketTimeout
   };
 };
 
-const isRealTransportConfigured = () => {
+const getResendConfig = () => {
+  const smtpConfig = getMailConfig();
+  const from = resolveFromAddress({
+    host: '',
+    user: smtpConfig.user,
+    from: getFirstEnvValue('RESEND_FROM', 'EMAIL_FROM', 'SMTP_FROM')
+  });
+
+  return {
+    apiKey: normalizeEnvText(getFirstEnvValue('RESEND_API_KEY')),
+    from,
+    endpoint: normalizeEnvText(getFirstEnvValue('RESEND_API_URL')) || 'https://api.resend.com/emails',
+    timeoutMs: parsePositiveInt(getFirstEnvValue('EMAIL_API_TIMEOUT_MS', 'RESEND_TIMEOUT_MS'), 15000)
+  };
+};
+
+const getSendGridConfig = () => {
+  const smtpConfig = getMailConfig();
+  const from = resolveFromAddress({
+    host: '',
+    user: smtpConfig.user,
+    from: getFirstEnvValue('SENDGRID_FROM', 'EMAIL_FROM', 'SMTP_FROM')
+  });
+
+  return {
+    apiKey: normalizeEnvText(getFirstEnvValue('SENDGRID_API_KEY')),
+    from,
+    endpoint: normalizeEnvText(getFirstEnvValue('SENDGRID_API_URL')) || 'https://api.sendgrid.com/v3/mail/send',
+    timeoutMs: parsePositiveInt(getFirstEnvValue('EMAIL_API_TIMEOUT_MS', 'SENDGRID_TIMEOUT_MS'), 15000)
+  };
+};
+
+const isSmtpTransportConfigured = () => {
   const config = getMailConfig();
 
   return Boolean(config.host && config.port && config.user && config.pass && config.from);
+};
+
+const isResendConfigured = () => {
+  const config = getResendConfig();
+  return Boolean(config.apiKey && config.from && !isPlaceholderFromAddress(config.from));
+};
+
+const isSendGridConfigured = () => {
+  const config = getSendGridConfig();
+  return Boolean(config.apiKey && config.from && !isPlaceholderFromAddress(config.from));
+};
+
+const getEmailProviderPreference = () => {
+  const provider = normalizeEnvText(getFirstEnvValue('EMAIL_PROVIDER'))?.toLowerCase();
+
+  if (!provider || !EMAIL_PROVIDER_NAMES.has(provider)) {
+    return 'auto';
+  }
+
+  return provider;
+};
+
+const resolveEmailProvider = () => {
+  const providerPreference = getEmailProviderPreference();
+
+  if (providerPreference !== 'auto') {
+    return providerPreference;
+  }
+
+  if (isResendConfigured()) {
+    return 'resend';
+  }
+
+  if (isSendGridConfigured()) {
+    return 'sendgrid';
+  }
+
+  return 'smtp';
+};
+
+const isRealDeliveryConfigured = () => {
+  const provider = resolveEmailProvider();
+
+  if (provider === 'resend') {
+    return isResendConfigured();
+  }
+
+  if (provider === 'sendgrid') {
+    return isSendGridConfigured();
+  }
+
+  return isSmtpTransportConfigured();
+};
+
+const fetchWithTimeout = async (url, options = {}, timeoutMs = 15000) => {
+  const controller = new AbortController();
+  const timerId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+  } finally {
+    clearTimeout(timerId);
+  }
+};
+
+const readResponseBody = async (response) => {
+  const bodyText = await response.text();
+  if (!bodyText) {
+    return '';
+  }
+
+  try {
+    const parsed = JSON.parse(bodyText);
+    return JSON.stringify(parsed);
+  } catch {
+    return bodyText;
+  }
+};
+
+const sendViaResend = async ({ subject, to, text, html }) => {
+  const config = getResendConfig();
+
+  if (!isResendConfigured()) {
+    throw new Error('Resend delivery is selected but RESEND_API_KEY / RESEND_FROM is not configured.');
+  }
+
+  const response = await fetchWithTimeout(
+    config.endpoint,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${config.apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        from: config.from,
+        to: [to],
+        subject,
+        text,
+        html
+      })
+    },
+    config.timeoutMs
+  );
+
+  if (!response.ok) {
+    const responseBody = await readResponseBody(response);
+    throw new Error(`[resend] ${response.status} ${response.statusText}: ${responseBody}`);
+  }
+
+  return response.json().catch(() => ({}));
+};
+
+const sendViaSendGrid = async ({ subject, to, text, html }) => {
+  const config = getSendGridConfig();
+
+  if (!isSendGridConfigured()) {
+    throw new Error('SendGrid delivery is selected but SENDGRID_API_KEY / SENDGRID_FROM is not configured.');
+  }
+
+  const from = parseFromAddress(config.from);
+  if (!from.email) {
+    throw new Error('SendGrid sender email is missing. Set SENDGRID_FROM to a valid verified sender.');
+  }
+
+  const content = [];
+
+  if (typeof text === 'string' && text.trim()) {
+    content.push({ type: 'text/plain', value: text });
+  }
+
+  if (typeof html === 'string' && html.trim()) {
+    content.push({ type: 'text/html', value: html });
+  }
+
+  if (content.length === 0) {
+    content.push({ type: 'text/plain', value: '' });
+  }
+
+  const response = await fetchWithTimeout(
+    config.endpoint,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${config.apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        personalizations: [
+          {
+            to: [{ email: to }]
+          }
+        ],
+        from: {
+          email: from.email,
+          ...(from.name ? { name: from.name } : {})
+        },
+        subject,
+        content
+      })
+    },
+    config.timeoutMs
+  );
+
+  if (!response.ok) {
+    const responseBody = await readResponseBody(response);
+    throw new Error(`[sendgrid] ${response.status} ${response.statusText}: ${responseBody}`);
+  }
+
+  return { accepted: true };
 };
 
 let cachedTransporter;
@@ -188,13 +427,16 @@ const getTransporter = () => {
     return cachedTransporter;
   }
 
-  if (isRealTransportConfigured()) {
+  if (isSmtpTransportConfigured()) {
     const config = getMailConfig();
 
     cachedTransporter = nodemailer.createTransport({
       host: config.host,
       port: config.port,
       secure: config.secure,
+      connectionTimeout: config.connectionTimeout,
+      greetingTimeout: config.greetingTimeout,
+      socketTimeout: config.socketTimeout,
       tls: {
         rejectUnauthorized: config.rejectUnauthorized
       },
@@ -226,7 +468,7 @@ const getMailFrom = () => {
   return DEFAULT_FROM;
 };
 
-const sendEmail = async ({ subject, to, text, html }) => {
+const sendViaSmtp = async ({ subject, to, text, html }) => {
   const transporter = getTransporter();
   const info = await transporter.sendMail({
     from: getMailFrom(),
@@ -236,7 +478,7 @@ const sendEmail = async ({ subject, to, text, html }) => {
     html
   });
 
-  if (!isRealTransportConfigured()) {
+  if (!isSmtpTransportConfigured()) {
     const preview = typeof info.message === 'string'
       ? info.message
       : info.message?.toString?.() || '';
@@ -246,6 +488,20 @@ const sendEmail = async ({ subject, to, text, html }) => {
   }
 
   return info;
+};
+
+const sendEmail = async ({ subject, to, text, html }) => {
+  const provider = resolveEmailProvider();
+
+  if (provider === 'resend') {
+    return sendViaResend({ subject, to, text, html });
+  }
+
+  if (provider === 'sendgrid') {
+    return sendViaSendGrid({ subject, to, text, html });
+  }
+
+  return sendViaSmtp({ subject, to, text, html });
 };
 
 export const sendWelcomeEmail = async ({ email, name }) => {
@@ -304,4 +560,4 @@ export const sendPasswordResetEmail = async ({ email, name, code }) => {
   });
 };
 
-export const isEmailDeliveryConfigured = () => isRealTransportConfigured();
+export const isEmailDeliveryConfigured = () => isRealDeliveryConfigured();
