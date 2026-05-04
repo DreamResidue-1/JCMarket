@@ -46,6 +46,7 @@ const translations: Record<Language, Record<string, TranslationValue>> = {
     forgotCopy:
       'Request a reset code, then confirm it here with your new password. Use the same email you signed up with. Google-only accounts do not use password reset codes.',
     forgotPassword: 'Forgot password?',
+    googleSignInUnavailable: 'Google sign-in could not start. Check the Google client ID and authorized origin for this site.',
     hide: 'Hide',
     itemCount: ({ count }) => `${count} ${Number(count) === 1 ? 'item' : 'items'}`,
     joinJCMarket: 'Join JCMarket',
@@ -126,6 +127,7 @@ const translations: Record<Language, Record<string, TranslationValue>> = {
     forgotCopy:
       'اطلب رمز إعادة التعيين ثم أكده هنا مع كلمة المرور الجديدة. استخدم نفس البريد الإلكتروني الذي سجلت به. الحسابات التي تعتمد على Google فقط لا تستخدم رموز إعادة التعيين.',
     forgotPassword: 'هل نسيت كلمة المرور؟',
+    googleSignInUnavailable: 'تعذر بدء تسجيل الدخول عبر Google. تحقق من Client ID والنطاقات المسموح بها لهذا الموقع.',
     hide: 'إخفاء',
     itemCount: ({ count }) => `${count} ${Number(count) === 1 ? 'منتج' : 'منتجات'}`,
     joinJCMarket: 'انضم إلى JCMarket',

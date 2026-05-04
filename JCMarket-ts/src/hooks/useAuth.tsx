@@ -87,8 +87,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const requestPasswordReset = async (email: string) => {
-    const response = await api.post<PasswordResetRequestResponse>('/api/auth/forgot-password/request', { email });
-    return response.data;
+    setError(null);
+
+    try {
+      const response = await api.post<PasswordResetRequestResponse>('/api/auth/forgot-password/request', { email });
+      return response.data;
+    } catch (resetError) {
+      setError(getErrorMessage(resetError, 'Password reset request failed.'));
+      throw resetError;
+    }
   };
 
   const confirmPasswordReset = async (input: PasswordResetConfirmInput) => {
@@ -182,6 +189,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     try {
       await confirmPasswordReset(input);
+      setAccessToken(null);
+      setSession(null);
+      setUser(null);
+      setSessionHint(false);
     } catch (resetError) {
       setError(getErrorMessage(resetError, 'Password reset failed.'));
       throw resetError;

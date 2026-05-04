@@ -6,26 +6,44 @@ const configuredBaseUrl = (
   import.meta.env.VITE_API_URL
   || import.meta.env.VITE_API_BASE_URL
   || ''
-).trim();
+).trim().replace(/\/+$/, '');
 
-const useDevProxy = import.meta.env.DEV
-  && /^https?:\/\/(?:localhost|127\.0\.0\.1):3000\/?$/i.test(configuredBaseUrl);
+const getRequestPath = (url = '') => {
+  if (!url) {
+    return '';
+  }
+
+  try {
+    return new URL(url, configuredBaseUrl || window.location.origin).pathname;
+  } catch {
+    return url.split('?')[0] || url;
+  }
+};
 
 const requiresCookieSession = (url = '') => (
-  url.startsWith('/api/auth/google')
-  || url.startsWith('/api/auth/login')
-  || url.startsWith('/api/auth/register')
-  || url.startsWith('/api/auth/refresh')
-  || url.startsWith('/api/auth/logout')
+  getRequestPath(url).startsWith('/api/auth/google')
+  || getRequestPath(url).startsWith('/api/auth/login')
+  || getRequestPath(url).startsWith('/api/auth/register')
+  || getRequestPath(url).startsWith('/api/auth/refresh')
+  || getRequestPath(url).startsWith('/api/auth/logout')
 );
 
 const requiresTrustedHeader = (url = '') => (
-  url.startsWith('/api/auth/refresh')
-  || url.startsWith('/api/auth/logout')
+  getRequestPath(url).startsWith('/api/auth/refresh')
+  || getRequestPath(url).startsWith('/api/auth/logout')
+);
+
+const skipsTokenRefresh = (url = '') => (
+  getRequestPath(url).startsWith('/api/auth/google')
+  || getRequestPath(url).startsWith('/api/auth/login')
+  || getRequestPath(url).startsWith('/api/auth/register')
+  || getRequestPath(url).startsWith('/api/auth/forgot-password')
+  || getRequestPath(url).startsWith('/api/auth/refresh')
+  || getRequestPath(url).startsWith('/api/auth/logout')
 );
 
 const api = axios.create({
-  baseURL: useDevProxy ? '' : configuredBaseUrl,
+  baseURL: configuredBaseUrl,
   withCredentials: false,
 });
 
@@ -91,13 +109,14 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = (error.config as any);
     const isRefreshRequest = typeof originalRequest?.url === 'string'
-      && originalRequest.url.includes('/api/auth/refresh');
+      && getRequestPath(originalRequest.url).startsWith('/api/auth/refresh');
 
     if (
       axios.isAxiosError(error)
       && error.response?.status === 401
       && !originalRequest?._retry
       && !isRefreshRequest
+      && !skipsTokenRefresh(originalRequest?.url)
     ) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {

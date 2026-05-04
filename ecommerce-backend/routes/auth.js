@@ -104,6 +104,33 @@ const hashResetCode = (code) => crypto.createHash('sha256').update(code).digest(
 
 const createPasswordResetCode = () => crypto.randomInt(100000, 1000000).toString();
 
+const isBcryptHash = (hash = '') => /^\$2[aby]\$\d{2}\$/.test(hash);
+
+const isLegacySha256Hash = (hash = '') => /^[a-f0-9]{64}$/i.test(hash);
+
+const hashLegacyPassword = (password) => crypto.createHash('sha256').update(password).digest('hex');
+
+const verifyPasswordAndUpgradeIfNeeded = async (user, password) => {
+  const currentHash = user.passwordHash || '';
+
+  if (isBcryptHash(currentHash)) {
+    return bcrypt.compare(password, currentHash);
+  }
+
+  if (isLegacySha256Hash(currentHash)) {
+    const isLegacyMatch = hashLegacyPassword(password) === currentHash.toLowerCase();
+
+    if (isLegacyMatch) {
+      user.passwordHash = await bcrypt.hash(password, 10);
+      await user.save();
+    }
+
+    return isLegacyMatch;
+  }
+
+  return false;
+};
+
 const buildBaseUsername = ({ name, email, username }) => {
   const baseSource = (username || name || email.split('@')[0] || 'user')
     .toLowerCase()
@@ -320,7 +347,7 @@ router.post('/login', asyncHandler(async (req, res) => {
     throw new AppError(400, 'This account uses Google sign-in. Continue with Google below.');
   }
 
-  const isPasswordValid = await bcrypt.compare(validatedPassword, user.passwordHash);
+  const isPasswordValid = await verifyPasswordAndUpgradeIfNeeded(user, validatedPassword);
   if (!isPasswordValid) {
     throw new AppError(401, 'Invalid email or password.');
   }

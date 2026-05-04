@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../../hooks/useAuthHook';
 import { useLanguage } from '../../i18n/LanguageContext';
+import { getErrorMessage } from '../../lib/errors';
 import { AuthPasswordField } from './AuthPasswordField';
 import './AuthPages.css';
 
@@ -33,8 +34,8 @@ export function ForgotPasswordPage() {
       setDevelopmentCode(response.developmentCode || '');
       setDeliveryMethod(response.deliveryMethod || (response.developmentCode ? 'development' : 'email'));
       setStep('confirm');
-    } catch {
-      // Error state is managed by the auth provider.
+    } catch (requestError) {
+      setLocalError(getErrorMessage(requestError, 'Password reset request failed.'));
     } finally {
       setSubmitting(false);
     }
@@ -50,8 +51,8 @@ export function ForgotPasswordPage() {
     try {
       await resetPassword({ email, code, newPassword });
       navigate('/login');
-    } catch {
-      // Error state is managed by the auth provider.
+    } catch (resetError) {
+      setLocalError(getErrorMessage(resetError, 'Password reset failed.'));
     } finally {
       setSubmitting(false);
     }
