@@ -169,12 +169,13 @@ export function Header({ cart }: HeaderProps) {
         )}
 
         <div className="site-header__inner">
+          <div>
+
           <Link to="/" className="site-header__brand" aria-label="JCMarket">
             <span className="site-header__brand-desktop">JCMarket</span>
-            <span className="site-header__brand-mobile">JC</span>
+            <span className="site-header__brand-mobile">JC</span> 
           </Link>
-    
-          {user && (
+      {user && (
               <div className="site-header__user">
                 <button
                   type="button"
@@ -200,6 +201,8 @@ export function Header({ cart }: HeaderProps) {
                 </button>
               </div>
             )} 
+          </div>
+        
           <form className="site-header__search" onSubmit={searchProducts}>
             <input
               className="site-header__search-input"
