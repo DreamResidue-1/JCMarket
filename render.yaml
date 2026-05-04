@@ -33,18 +33,40 @@ services:
         value: production
       - key: GOOGLE_CLIENT_ID
         value: 489109189204-q3v366mm8ed5sht13bn7ra7vpqf1ujtn.apps.googleusercontent.com
+      - key: GOOGLE_CLIENT_IDS
+        value: 489109189204-q3v366mm8ed5sht13bn7ra7vpqf1ujtn.apps.googleusercontent.com
       - key: JWT_SECRET
         generateValue: true
       - key: REFRESH_TOKEN_SECRET
         generateValue: true
+      - key: ADMIN_EMAILS
+        value: admin@example.com
       - key: FRONTEND_URL
         value: https://jcmarket.onrender.com
+      - key: DB_TYPE
+        value: mysql
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: "3306"
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_SSL
+        value: "false"
+      - key: DB_SSL_REJECT_UNAUTHORIZED
+        value: "true"
       - key: SMTP_HOST
         sync: false
       - key: SMTP_PORT
         sync: false
       - key: SMTP_SECURE
         sync: false
+      - key: SMTP_TLS_REJECT_UNAUTHORIZED
+        value: "true"
       - key: SMTP_USER
         sync: false
       - key: SMTP_PASS
