@@ -20,7 +20,7 @@ export const getGoogleClientIds = () => {
 };
 
 export const getGoogleClientId = () => {
-  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const [clientId] = getGoogleClientIds();
   if (!clientId) {
     throw new AppError(500, 'Google client ID is not configured on the server.');
   }
@@ -38,13 +38,29 @@ export const getAdminEmails = () => {
 };
 
 export const verifyGoogleIdToken = async (idToken) => {
-  const clientId = getGoogleClientId();
-  const googleClient = new OAuth2Client(clientId);
+  const clientIds = getGoogleClientIds();
 
-  const ticket = await googleClient.verifyIdToken({
-    idToken,
-    audience: clientId
-  });
+  if (clientIds.length === 0) {
+    throw new AppError(500, 'Google client ID is not configured on the server.');
+  }
+
+  const googleClient = new OAuth2Client(clientIds[0]);
+  let ticket;
+
+  try {
+    ticket = await googleClient.verifyIdToken({
+      idToken,
+      audience: clientIds
+    });
+  } catch (error) {
+    throw new AppError(
+      401,
+      'Google sign-in token could not be verified.',
+      process.env.NODE_ENV !== 'production'
+        ? { reason: error instanceof Error ? error.message : String(error) }
+        : undefined
+    );
+  }
 
   const payload = ticket.getPayload();
 

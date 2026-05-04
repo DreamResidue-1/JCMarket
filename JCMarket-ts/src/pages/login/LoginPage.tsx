@@ -9,17 +9,17 @@ import { AuthProfilePreview } from './AuthProfilePreview';
 import './AuthPages.css';
 
 const GoogleSignInButton = memo(function GoogleSignInButton({
+  onError,
   onSuccess
 }: {
+  onError: () => void;
   onSuccess: (credentialResponse: CredentialResponse) => Promise<void>;
 }) {
   return (
     <div className="auth-google">
       <GoogleLogin
         onSuccess={onSuccess}
-        onError={() => {
-          // Error state is managed by the auth provider when the credential reaches the API.
-        }}
+        onError={onError}
         theme="outline"
         size="large"
         text="continue_with"
@@ -36,6 +36,7 @@ export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [localError, setLocalError] = useState('');
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -46,6 +47,7 @@ export function LoginPage() {
   const handlePasswordLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitting(true);
+    setLocalError('');
     clearError();
 
     try {
@@ -64,6 +66,7 @@ export function LoginPage() {
     }
 
     setSubmitting(true);
+    setLocalError('');
     clearError();
 
     try {
@@ -75,6 +78,10 @@ export function LoginPage() {
       setSubmitting(false);
     }
   }, [clearError, loginWithGoogle, navigate]);
+
+  const handleGoogleError = useCallback(() => {
+    setLocalError(t('googleSignInUnavailable'));
+  }, [t]);
 
   return (
     <div className="auth-page">
@@ -124,9 +131,9 @@ export function LoginPage() {
           <span>{t('orContinueWith')}</span>
         </div>
 
-        <GoogleSignInButton onSuccess={handleGoogleSuccess} />
+        <GoogleSignInButton onError={handleGoogleError} onSuccess={handleGoogleSuccess} />
 
-        {error && <div className="auth-error">{error}</div>}
+        {(localError || error) && <div className="auth-error">{localError || error}</div>}
 
         <div className="auth-footer">
           {t('newHere')} <Link to="/signup">{t('createYourAccount')}</Link>

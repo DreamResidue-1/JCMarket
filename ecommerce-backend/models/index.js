@@ -2,8 +2,33 @@ import { Sequelize } from 'sequelize';
 import sqlJsAsSqlite3 from 'sql.js-as-sqlite3';
 import fs from 'fs';
 
-const isUsingRDS = process.env.RDS_HOSTNAME && process.env.RDS_USERNAME && process.env.RDS_PASSWORD;
-const dbType = process.env.DB_TYPE || 'mysql';
+const getFirstEnv = (...keys) => {
+  for (const key of keys) {
+    const value = process.env[key]?.trim();
+
+    if (value) {
+      return value;
+    }
+  }
+
+  return undefined;
+};
+
+const getBooleanEnv = (value, fallback = false) => {
+  if (typeof value !== 'string') {
+    return fallback;
+  }
+
+  return ['1', 'true', 'yes', 'on'].includes(value.trim().toLowerCase());
+};
+
+const dbType = getFirstEnv('DB_TYPE', 'DB_DIALECT') || 'mysql';
+const dbHost = getFirstEnv('DB_HOST', 'MYSQL_HOST', 'RDS_HOSTNAME');
+const dbName = getFirstEnv('DB_NAME', 'MYSQL_DATABASE', 'RDS_DB_NAME');
+const dbUsername = getFirstEnv('DB_USER', 'DB_USERNAME', 'MYSQL_USER', 'RDS_USERNAME');
+const dbPassword = getFirstEnv('DB_PASSWORD', 'MYSQL_PASSWORD', 'RDS_PASSWORD');
+const dbPort = Number.parseInt(getFirstEnv('DB_PORT', 'MYSQL_PORT', 'RDS_PORT') || '', 10);
+const isUsingExternalDatabase = Boolean(dbHost && dbName && dbUsername && dbPassword);
 const defaultPorts = {
   mysql: 3306,
   postgres: 5432,
@@ -12,14 +37,24 @@ const defaultPort = defaultPorts[dbType];
 
 export let sequelize;
 
-if (isUsingRDS) {
+if (isUsingExternalDatabase) {
+  const useSsl = getBooleanEnv(process.env.DB_SSL);
+
   sequelize = new Sequelize({
-    database: process.env.RDS_DB_NAME,
-    username: process.env.RDS_USERNAME,
-    password: process.env.RDS_PASSWORD,
-    host: process.env.RDS_HOSTNAME,
-    port: process.env.RDS_PORT || defaultPort,
+    database: dbName,
+    username: dbUsername,
+    password: dbPassword,
+    host: dbHost,
+    port: Number.isFinite(dbPort) ? dbPort : defaultPort,
     dialect: dbType,
+    dialectOptions: useSsl
+      ? {
+          ssl: {
+            require: true,
+            rejectUnauthorized: getBooleanEnv(process.env.DB_SSL_REJECT_UNAUTHORIZED, true)
+          }
+        }
+      : undefined,
     logging: false
   });
 } else {

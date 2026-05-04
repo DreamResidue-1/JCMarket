@@ -4,6 +4,7 @@ import api, { setAccessToken } from '../lib/api';
 import { queueCompanyNotice } from '../lib/companyNotice';
 import { getErrorMessage } from '../lib/errors';
 import type {
+  AuthSessionStatusResponse,
   AuthResponse,
   AuthSession,
   AuthUser,
@@ -31,14 +32,6 @@ const setSessionHint = (value: boolean) => {
     }
   } catch {
     // Ignore storage errors.
-  }
-};
-
-const getSessionHint = () => {
-  try {
-    return localStorage.getItem(sessionHintKey) === 'true';
-  } catch {
-    return false;
   }
 };
 
@@ -81,14 +74,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     await authenticateWithResponse(response.data);
   };
 
-  const refreshSession = async () => {
-    const response = await api.post<AuthResponse>('/api/auth/refresh');
-    await authenticateWithResponse(response.data);
-  };
-
   const requestPasswordReset = async (email: string) => {
-    const response = await api.post<PasswordResetRequestResponse>('/api/auth/forgot-password/request', { email });
-    return response.data;
+    setError(null);
+
+    try {
+      const response = await api.post<PasswordResetRequestResponse>('/api/auth/forgot-password/request', { email });
+      return response.data;
+    } catch (resetError) {
+      setError(getErrorMessage(resetError, 'Password reset request failed.'));
+      throw resetError;
+    }
   };
 
   const confirmPasswordReset = async (input: PasswordResetConfirmInput) => {
@@ -120,13 +115,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     const initializeAuth = async () => {
-      if (!getSessionHint()) {
-        setIsLoading(false);
-        return;
-      }
-
       try {
-        await refreshSession();
+        const sessionResponse = await api.get<AuthSessionStatusResponse>('/api/auth/session');
+        const { authenticated, accessToken, user: authenticatedUser } = sessionResponse.data;
+
+        if (authenticated && accessToken && authenticatedUser) {
+          persistSession({ accessToken }, authenticatedUser);
+          return;
+        }
+
+        setAccessToken(null);
+        setSession(null);
+        setUser(null);
+        setSessionHint(false);
       } catch {
         setAccessToken(null);
         setSession(null);
@@ -182,6 +183,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     try {
       await confirmPasswordReset(input);
+      setAccessToken(null);
+      setSession(null);
+      setUser(null);
+      setSessionHint(false);
     } catch (resetError) {
       setError(getErrorMessage(resetError, 'Password reset failed.'));
       throw resetError;
