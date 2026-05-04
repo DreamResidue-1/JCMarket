@@ -59,6 +59,18 @@ services:
         value: "false"
       - key: DB_SSL_REJECT_UNAUTHORIZED
         value: "true"
+      - key: EMAIL_PROVIDER
+        value: auto
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM
+        sync: false
+      - key: SENDGRID_API_KEY
+        sync: false
+      - key: SENDGRID_FROM
+        sync: false
+      - key: EMAIL_API_TIMEOUT_MS
+        value: "15000"
       - key: SMTP_HOST
         sync: false
       - key: SMTP_PORT
