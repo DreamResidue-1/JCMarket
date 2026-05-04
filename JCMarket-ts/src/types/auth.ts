@@ -47,6 +47,12 @@ export interface MeResponse {
   permissions: AuthPermission[];
 }
 
+export interface AuthSessionStatusResponse {
+  authenticated: boolean;
+  accessToken?: string;
+  user?: AuthUser;
+}
+
 export type GoogleAuthResponse = AuthResponse;
 
 export interface AdminUser extends AuthUser {

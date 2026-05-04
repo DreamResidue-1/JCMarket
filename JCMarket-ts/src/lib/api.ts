@@ -24,6 +24,7 @@ const requiresCookieSession = (url = '') => (
   getRequestPath(url).startsWith('/api/auth/google')
   || getRequestPath(url).startsWith('/api/auth/login')
   || getRequestPath(url).startsWith('/api/auth/register')
+  || getRequestPath(url).startsWith('/api/auth/session')
   || getRequestPath(url).startsWith('/api/auth/refresh')
   || getRequestPath(url).startsWith('/api/auth/logout')
 );
@@ -38,6 +39,7 @@ const skipsTokenRefresh = (url = '') => (
   || getRequestPath(url).startsWith('/api/auth/login')
   || getRequestPath(url).startsWith('/api/auth/register')
   || getRequestPath(url).startsWith('/api/auth/forgot-password')
+  || getRequestPath(url).startsWith('/api/auth/session')
   || getRequestPath(url).startsWith('/api/auth/refresh')
   || getRequestPath(url).startsWith('/api/auth/logout')
 );

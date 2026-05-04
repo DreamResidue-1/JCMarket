@@ -7,6 +7,7 @@ import {
   generateAccessToken,
   generateRefreshToken,
   hashRefreshToken,
+  verifyAccessToken,
   verifyRefreshToken
 } from '../utils/jwt.js';
 import { authenticateToken } from '../middleware/auth.js';
@@ -266,6 +267,58 @@ const serializeAuthUser = (user) => {
   };
 };
 
+const parseBearerToken = (authHeaderValue = '') => {
+  if (typeof authHeaderValue !== 'string') {
+    return null;
+  }
+
+  const [scheme, token] = authHeaderValue.trim().split(/\s+/, 2);
+
+  if (!scheme || !token || scheme.toLowerCase() !== 'bearer') {
+    return null;
+  }
+
+  return token;
+};
+
+const buildSessionFromRefreshCookie = async (req, res) => {
+  const refreshToken = req.cookies[refreshCookieName];
+
+  if (!refreshToken) {
+    return null;
+  }
+
+  let payload;
+
+  try {
+    payload = verifyRefreshToken(refreshToken);
+  } catch (error) {
+    clearRefreshCookie(res);
+    return null;
+  }
+
+  const user = await User.findByPk(payload.userId);
+
+  if (!user || !user.refreshToken) {
+    clearRefreshCookie(res);
+    return null;
+  }
+
+  const isValid = await compareRefreshToken(refreshToken, user.refreshToken);
+
+  if (!isValid) {
+    clearRefreshCookie(res);
+    return null;
+  }
+
+  const authResponse = await createSession(res, user);
+
+  return {
+    accessToken: authResponse.accessToken,
+    user: serializeAuthUser(user)
+  };
+};
+
 router.post('/google', asyncHandler(async (req, res) => {
   const { credential } = req.body;
 
@@ -506,6 +559,41 @@ router.post('/logout', asyncHandler(async (req, res) => {
 
   clearRefreshCookie(res);
   res.json({ message: 'Logged out' });
+}));
+
+router.get('/session', asyncHandler(async (req, res) => {
+  const bearerToken = parseBearerToken(req.get('authorization'));
+
+  if (bearerToken) {
+    try {
+      const payload = verifyAccessToken(bearerToken);
+      const user = await User.findByPk(payload.userId);
+
+      if (user) {
+        res.json({
+          authenticated: true,
+          accessToken: bearerToken,
+          user: serializeAuthUser(user)
+        });
+        return;
+      }
+    } catch (error) {
+      // Fall back to refresh-cookie session check.
+    }
+  }
+
+  const sessionFromCookie = await buildSessionFromRefreshCookie(req, res);
+
+  if (!sessionFromCookie) {
+    res.json({ authenticated: false });
+    return;
+  }
+
+  res.json({
+    authenticated: true,
+    accessToken: sessionFromCookie.accessToken,
+    user: sessionFromCookie.user
+  });
 }));
 
 router.get('/me', authenticateToken, asyncHandler(async (req, res) => {
