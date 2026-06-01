@@ -27,6 +27,12 @@
   letter-spacing: 0.02em;
 }
 
+.site-header__logo {
+  height: 36px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .site-header__brand-desktop,
 .site-header__brand-mobile {
   display: block;

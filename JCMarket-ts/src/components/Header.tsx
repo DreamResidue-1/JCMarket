@@ -5,6 +5,7 @@ import { useLanguage } from '../i18n/LanguageContext';
 import { getAvatarInitials, readAvatarFile } from '../lib/avatar';
 import { resolveBackendAssetUrl } from '../lib/assets';
 import { consumeCompanyNotice } from '../lib/companyNotice';
+import logoUrl from '../../logo.svg';
 import './Header.css';
 
 type HeaderProps = {
@@ -200,9 +201,8 @@ export function Header({ cart }: HeaderProps) {
             )} 
 
             <Link to="/" className="site-header__brand" aria-label="JCMarket">
-            <span className="site-header__brand-desktop">JCMarket</span>
-            <span className="site-header__brand-mobile">JC</span> 
-          </Link>
+              <img src={logoUrl} alt="JC Market" className="site-header__logo" />
+            </Link>
           </div>
         
           <form className="site-header__search" onSubmit={searchProducts}>

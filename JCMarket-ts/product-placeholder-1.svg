@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" rx="12" fill="#F8FAFC" />
+  <rect x="80" y="60" width="640" height="360" rx="8" fill="#E6EEF9" />
+  <text x="400" y="260" font-family="Segoe UI, Roboto" font-size="28" fill="#0F1724" text-anchor="middle">Sample Product Image</text>
+  <rect x="80" y="440" width="640" height="80" rx="8" fill="#FFFFFF" stroke="#E2E8F0" />
+  <text x="120" y="490" font-family="Segoe UI, Roboto" font-size="22" fill="#0F1724">Sample Product — Blue Tee</text>
+</svg>
