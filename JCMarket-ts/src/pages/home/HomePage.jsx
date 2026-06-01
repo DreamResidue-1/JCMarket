@@ -5,10 +5,11 @@ import { Header } from '../../components/Header';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { ProductsGrid } from './ProductsGrid';
 import './HomePage.css';
+import sampleProducts from '../../sample-products.json';
 
 export function HomePage({ cart, loadCart }) {
   const { t } = useLanguage();
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(sampleProducts);
   const [error, setError] = useState('');
   const [searchParams] = useSearchParams();
   const search = searchParams.get('search');
@@ -24,11 +25,17 @@ export function HomePage({ cart, loadCart }) {
       const urlPath = params.toString() ? `/api/products?${params.toString()}` : '/api/products';
       try {
         const response = await api.get(urlPath);
-        setProducts(response.data);
+        if (Array.isArray(response.data) && response.data.length > 0) {
+          setProducts(response.data);
+        }
         setError('');
       } catch (loadError) {
-        setProducts([]);
+        // fallback to sample data so the storefront works offline/demo
+        setProducts(sampleProducts);
         setError(loadError instanceof Error ? loadError.message : t('failedToLoadProducts'));
+        // keep running silently in console for developers
+        // eslint-disable-next-line no-console
+        console.warn('Failed to load /api/products — using local sample data:', loadError);
       }
     };
 
@@ -42,7 +49,9 @@ export function HomePage({ cart, loadCart }) {
       <Header cart={cart} />
 
       <div className="home-page">
-        <ProductsGrid products={products} loadCart={loadCart} search={search} error={error} />
+        <div className="container">
+          <ProductsGrid products={products} loadCart={loadCart} search={search} error={error} />
+        </div>
       </div>
     </>
   );

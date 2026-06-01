@@ -1,5 +1,7 @@
 
 
+<p align="center"><img src="../JCMarket-ts/logo.svg" alt="JC Market logo" width="200" /></p>
+
 ## Set up this backend
 1. Make sure you have NodeJS installed (version 22+). If not, [click here to install](https://nodejs.org/).
 2. Download this code by clicking the green `Code` button (in the top-right) > Click `Download Zip`.

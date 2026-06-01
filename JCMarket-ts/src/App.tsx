@@ -8,11 +8,13 @@ import { LoginPage } from './pages/login/LoginPage'
 import { RegisterPage } from './pages/login/RegisterPage'
 import { ForgotPasswordPage } from './pages/login/ForgotPasswordPage'
 import { AddProductPage } from './pages/AddProductPage.tsx'
+import { ProductPage } from './pages/home/ProductPage'
 import { Page404 } from './pages/Page404'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import ChatWidget from './components/ChatWidget.jsx'
 import api from './lib/api'
 import './App.css'
+import './brand.css'
 
 type CartItem = {
   productId: number;
@@ -35,6 +37,7 @@ function App() {
     <>
     <Routes>
       <Route index element={<HomePage loadCart={loadCart} cart={cart}/>}/>
+      <Route path='product/:productId' element={<ProductPage loadCart={loadCart} cart={cart} />}/>
       <Route path='checkout' element={<CheckoutPage loadCart={loadCart}  cart={cart}/>}/>
       <Route path='checkout/:productId' element={<CheckoutPage loadCart={loadCart}  cart={cart}/>}/>
       <Route path='orders'  element={<OrdersPage loadCart={loadCart} cart={cart} />}/>

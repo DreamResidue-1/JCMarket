@@ -1,5 +1,6 @@
 import api from '../../lib/api';
 import { useState } from 'react';
+import { Link } from 'react-router';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { resolveBackendAssetUrl } from '../../lib/assets';
 import { formatMoney } from '../../utils/Money'
@@ -30,12 +31,13 @@ export function Product({ loadCart, product }) {
   return (
     <div className="product-container">
       <div className="product-image-container">
-        <img className="product-image"
-          src={resolveBackendAssetUrl(product.image)} />
+        <Link to={`/product/${product.id}`}>
+          <img className="product-image" src={resolveBackendAssetUrl(product.image)} alt={product.name} />
+        </Link>
       </div>
 
       <div className="product-name limit-text-to-2-lines">
-        {product.name}
+        <Link to={`/product/${product.id}`} className="product-name-link">{product.name}</Link>
       </div>
 
       <div className="product-rating-container">

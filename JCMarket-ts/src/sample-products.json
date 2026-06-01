@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "name": "Classic Blue Tee",
+    "description": "Cotton t-shirt, comfortable everyday wear.",
+    "priceCents": 1999,
+    "currency": "USD",
+    "image": "/product-placeholder-1.svg",
+    "inventory": 120,
+    "rating": { "stars": 4, "count": 82 }
+  },
+  {
+    "id": 2,
+    "name": "Leather Wallet",
+    "description": "Hand-stitched leather wallet with RFID protection.",
+    "priceCents": 4599,
+    "currency": "USD",
+    "image": "/product-placeholder-2.svg",
+    "inventory": 42,
+    "rating": { "stars": 5, "count": 47 }
+  },
+  {
+    "id": 3,
+    "name": "Canvas Tote Bag",
+    "description": "Durable tote for shopping and travel.",
+    "priceCents": 2499,
+    "currency": "USD",
+    "image": "/product-placeholder-1.svg",
+    "inventory": 200,
+    "rating": { "stars": 4, "count": 16 }
+  },
+  {
+    "id": 4,
+    "name": "Stainless Water Bottle",
+    "description": "Keeps drinks hot or cold for 12 hours.",
+    "priceCents": 2999,
+    "currency": "USD",
+    "image": "/product-placeholder-2.svg",
+    "inventory": 88,
+    "rating": { "stars": 4, "count": 119 }
+  },
+  {
+    "id": 5,
+    "name": "Wireless Earbuds",
+    "description": "Noise-cancelling earbuds with 24h battery.",
+    "priceCents": 7999,
+    "currency": "USD",
+    "image": "/product-placeholder-1.svg",
+    "inventory": 35,
+    "rating": { "stars": 5, "count": 9 }
+  }
+]

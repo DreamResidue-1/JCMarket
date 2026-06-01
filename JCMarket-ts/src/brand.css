@@ -1,0 +1,41 @@
+:root{
+  --color-primary: #0B6EFD;
+  --color-accent: #00C2A8;
+  --color-neutral-900: #0F1724;
+  --color-bg: #F8FAFC;
+  --max-width: 1150px;
+}
+
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{
+  margin:0;
+  font-family: Roboto, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial;
+  background: linear-gradient(180deg, var(--color-bg), #fff);
+  color: var(--color-neutral-900);
+  -webkit-font-smoothing:antialiased;
+}
+
+.container{
+  max-width:var(--max-width);
+  margin: 90px auto 40px; /* leave space for fixed header */
+  padding: 0 20px;
+}
+
+button{font-family:inherit}
+
+/* Product card */
+.product-card{
+  background:white;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 8px 24px rgba(15,23,42,0.06);
+}
+.product-card__media{background:#f3f7ff;padding:18px;display:flex;align-items:center;justify-content:center}
+.product-card__body{padding:16px}
+.product-card__title{font-weight:700;margin:0 0 6px}
+.product-card__price{color:var(--color-primary);font-weight:800}
+
+/* Utility */
+.row{display:flex;gap:16px}
+.col{flex:1}
